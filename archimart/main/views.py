@@ -19,11 +19,11 @@ async def search_data(request):
 
         "count": 2,
 
-        "num_pages": 1,
+        "num_pages": 2,
 
         "current_page": 1,
 
-        "has_next": False,
+        "has_next": True,
 
         "has_previous": False,
 
@@ -252,7 +252,42 @@ async def search_data(request):
 
         "description": "Beautiful traditional property in historic Old Dhaka area."
 
-        }
+        },
+        {
+
+        "id": 7,
+
+        "title": "Modern Apartment in Uttara Sector-7",
+
+        "location": "Uttara Sector-7, Dhaka",
+
+        "price": 35000,
+
+        "bedrooms": 3,
+
+        "bathrooms": 2,
+
+        "area": 1200,
+
+        "type": "Apartment",
+
+        "images": [
+
+            "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
+
+            "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=600&fit=crop",
+
+            "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=800&h=600&fit=crop"
+
+        ],
+
+        "image": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&h=300&fit=crop",
+
+        "features": ["Parking", "Gym", "Security", "Generator", "Swimming Pool"],
+
+        "description": "Beautiful modern apartment with all amenities in prime Uttara location. Perfect for families with spacious rooms and contemporary design."
+
+        },
 
         ]
 
