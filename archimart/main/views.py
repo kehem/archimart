@@ -56,7 +56,6 @@ def get_paginated_products(page_number, per_page, category=None, sub_category=No
         "has_previous": page_obj.has_previous(),
         "results": results,
     }
-dfddd
 
 async def json_file(request):
     category = request.GET.get("category")
