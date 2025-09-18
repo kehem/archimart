@@ -31,6 +31,8 @@ urlpatterns = [
     path('admin_edit_specification/<product>/<pk>',views.admin_edit_specification,name="admin_edit_specification"),
     path('admin_delete_specification/<product>/<pk>',views.admin_delete_specification,name="admin_delete_specification"),
     
+
+    path('api/search.html',views.search_data,name="search"),
 ]
 
 if settings.DEBUG:
