@@ -58,6 +58,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://archimartbd.com",
+    "https://www.archimartbd.com",
+]
 
 CORS_ALLOWED_ORIGINS = [
     "http://192.168.0.111:3000",
