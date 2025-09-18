@@ -1,0 +1,123 @@
+{% extends "archimart/base.html" %}
+{% load static %}
+{% block content %}
+  <!-- Main Section -->
+  <section class="main-content">
+    <div class="portrait-image">
+      <img src="{% static 'archimart/image/po.png' %}" alt="Portrait Background" class="portrait-img" />
+    </div>
+    
+    <div class="card-container">
+      <div class="card">
+        <img src="{% static 'archimart/image/Screenshot__249_-removebg-preview.png' %}" alt="Product 1" class="card-img" />
+        <h3>Construction Materials</h3>
+        <p>High-quality bricks, cement, and steel for your building needs.</p>
+        <a href="{% url 'construction' %}?category=Construction" class="card-button">Shop Now</a>
+      </div>
+      <div class="card">
+        <img src="{% static 'archimart/image/Screenshot__249_-removebg-preview.png' %}" alt="Product 2" class="card-img" />
+        <h3>Home Appliances</h3>
+        <p>Modern appliances to enhance your home's functionality.</p>
+        <a href="HomeAppliances.html" class="card-button">Shop Now</a>
+      </div>
+      <div class="card">
+        <img src="{% static 'archimart/image/Screenshot__249_-removebg-preview.png' %}" alt="Product 3" class="card-img" />
+        <h3>Furniture</h3>
+        <p>Stylish and durable furniture for every room.</p>
+        <a href="Furnitures.html" class="card-button">Shop Now</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Menu Section -->
+  <section class="menu-section">
+    <div class="menu-panel">
+      <div class="menu-category" data-image="construction">
+        <div class="category-title" role="button" aria-expanded="false">
+          <a href="{% url 'construction' %}?category=Construction">Construction Materials</a>
+        </div>
+        <ul class="dropdown-list">
+          <li class="subcategory">
+            <a href="{% url 'construction' %}?category=civil-work">Civil Work</a>
+            <ul class="subcategory-list">
+              <li><a href="{% url 'construction' %}?category=cement">Cement</a></li>
+              <li><a href="{% url 'construction' %}?category=Sand">Sand</a></li>
+              <li><a href="{% url 'construction' %}?category=Brick">Brick</a></li>
+              <li><a href="{% url 'construction' %}?category=Reinforcement">Reinforcement</a></li>
+            </ul>
+          </li>
+          <li class="subcategory">
+            <a href="{% url 'construction' %}?category=interior">Interior</a>
+            <ul class="subcategory-list">
+              <li><a href="{% url 'construction' %}?category=Tiles">Tiles</a></li>
+              <li><a href="{% url 'construction' %}?category=Wood">Wood</a></li>
+              <li><a href="{% url 'construction' %}?category=Lock">Lock</a></li>
+              <li><a href="{% url 'construction' %}?category=Mirror">Mirror</a></li>
+            </ul>
+          </li>
+          <li class="subcategory">
+            <a href="{% url 'construction' %}?category=Paint">Paint</a>
+            <ul class="subcategory-list">
+              <li><a href="{% url 'construction' %}?category=Waterproofing">Waterproofing</a></li>
+              <li><a href="{% url 'construction' %}?category=Interior">Interior</a></li>
+              <li><a href="{% url 'construction' %}?category=Exterior">Exterior</a></li>
+            </ul>
+          </li>
+          <li class="subcategory">
+            <a href="{% url 'construction' %}?category=electronics">Electrical</a>
+            <ul class="subcategory-list">
+              <li><a href="{% url 'construction' %}?category=Cable">Cable</a></li>
+              <li><a href="{% url 'construction' %}?category=Holder">Holder</a></li>
+              <li><a href="{% url 'construction' %}?category=PVCConduit">PVC Conduit</a></li>
+            </ul>
+          </li>
+          <li class="subcategory">
+            <a href="{% url 'construction' %}?category=Sanitary">Sanitary</a>
+            <ul class="subcategory-list">
+              <li><a href="{% url 'construction' %}?category=Fittings">Fittings</a></li>
+              <li><a href="{% url 'construction' %}?category=Fixture">Fixture</a></li>
+              <li><a href="{% url 'construction' %}?category=Pump">Pump</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="menu-category" data-image="tools">
+        <div class="category-title" role="button" aria-expanded="false">
+          <a href="HomeAppliances.html">Home Appliances</a>
+        </div>
+        <ul class="dropdown-list">
+          <li><a href="HomeAppliances.html?category=Hammer">Hammer</a></li> 
+          <li><a href="HomeAppliances.html?category=Drill">Drill</a></li>
+          <li><a href="HomeAppliances.html?category=Saw">Saw</a></li>
+        </ul>
+      </div>
+      <div class="menu-category" data-image="safety">
+        <div class="category-title" role="button" aria-expanded="false">
+          <a href="Furnitures.html">Furniture</a>
+        </div>
+        <ul class="dropdown-list">
+          <li><a href="Furnitures.html?category=Helmet">Helmet</a></li>
+          <li><a href="Furnitures.html?category=Gloves">Gloves</a></li>
+          <li><a href="Furnitures.html?category=Boots">Boots</a></li>
+        </ul>
+      </div>
+      <div class="menu-category" data-image="finishing">
+        <div class="category-title" role="button" aria-expanded="false">
+          <a href="Others.html">Others</a>
+        </div>
+        <ul class="dropdown-list">
+          <li><a href="Others.html?category=Paint">Paint</a></li>
+          <li><a href="Others.html?category=Tiles">Tiles</a></li>
+          <li><a href="Others.html?category=Wallpaper">Wallpaper</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="image-panel">
+      <img src="{% static 'archimart/image/Def.jpg' %}" alt="Default cover image" class="active" data-image="default" />
+      <img src="{% static 'archimart/image/constuction.jpg' %}" alt="Construction materials" data-image="construction" />
+      <img src="{% static 'archimart/image/homeapp.jpg' %}" alt="Home Appliances" data-image="tools" />
+      <img src="{% static 'archimart/image/Furniture.jpg' %}" alt="Furniture" data-image="safety" />
+      <img src="{% static 'archimart/image/Furniture.jpg' %}" alt="Finishing materials" data-image="finishing" />
+    </div>
+  </section>
+{% endblock content %}

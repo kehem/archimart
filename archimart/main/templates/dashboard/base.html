@@ -1,0 +1,248 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="icon" type="image/x-icon" href="https://kehem.com/static/kehem.ico">
+  <!-- Highlight.js -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+   <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs4.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs4.min.js"></script>
+
+
+  <link href="https://cdn.jsdelivr.net/npm/mastorscdn@2.0.1/mastors.min.css" rel="stylesheet" >
+<script type="module" src="https://cdn.jsdelivr.net/gh/surajit-singha-sisir/mastorsCDN@v2.0/mastors.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+   
+  <style>
+  * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        font-family: 'Roboto', sans-serif;
+        display: flex;
+        height: 100vh;
+        background-color: #f4f4f9;
+    }
+
+    .sidebar {
+        width: 250px;
+        background-color: #2f3b52;
+        color: white;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        padding: 20px 10px;
+        transition: all 0.3s ease;
+    }
+
+    .sidebar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .logo {
+        font-size: 20px;
+        font-weight: 500;
+        color: #fff;
+    }
+
+    .profile {
+        display: flex;
+        align-items: center;
+    }
+
+    .avatar {
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+    }
+
+    .username {
+        font-size: 16px;
+    }
+
+    .menu {
+        margin-top: 20px;
+    }
+    a:hover{
+        color:#f77171;
+        text-decoration:none;
+    }
+    .menu ul {
+        list-style-type: none;
+    }
+
+    .menu-item {
+        margin: 15px 0;
+        position: relative;
+    }
+
+    .menu-link {
+        color: white;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+    }
+
+    .menu-link:hover {
+        background-color: #3e4a68;
+    }
+
+    .menu-link .icon {
+        margin-right: 15px;
+        font-size: 18px;
+    }
+
+    .menu-item .menu-link.active {
+        background-color: #5c8ad0;
+    }
+
+    .content {
+        margin-left: 270px;
+        padding: 30px;
+        flex-grow: 1;
+    }
+
+    .icon {
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+    }
+
+    /* FontAwesome icons for the sidebar */
+    .icon.home::before { content: "\f015"; }
+    .icon.pie-chart::before { content: "\f200"; }
+    .icon.graph::before { content: "\f080"; }
+    .icon.performance::before { content: "\f0ae"; }
+    .icon.investments::before { content: "\f0e8"; }
+    .icon.reports::before { content: "\f15c"; }
+    .icon.settings::before { content: "\f013"; }
+    .icon.logout::before { content: "\f2f5"; }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">KEHEM IT</div>
+      <div class="profile">
+        <img src="https://kehem.com/static/kehem.webp" alt="KEHEM Logo" class="avatar">
+      </div>
+    </div>
+    <nav class="menu">
+      <ul>
+        <li class="menu-item">
+          <a href="{% url "dashboard" %}" class="menu-link {% if 'dashboard' in request.path %}active{% endif %}"><i class="icon pie-chart"></i> Dashboard</a>
+        </li>
+        <li class="menu-item">
+          <a href="{% url "admin_category" %}" class="menu-link {% if 'admin_category' in request.path %}active{% endif %}"><i class="icon home"></i> Category</a>
+        </li>
+        <li class="menu-item">
+          <a href="{% url "admin_sub_category" %}" class="menu-link {% if 'admin_sub_category' in request.path %}active{% endif %}"><i class="icon home"></i>SubCategory</a>
+        </li>
+        <li class="menu-item">
+          <a href="{% url "admin_subsubcategory" %}" class="menu-link {% if 'admin_subsubcategory' in request.path %}active{% endif %}"><i class="icon home"></i>SubSubCategory</a>
+        </li>
+        <li class="menu-item">
+          <a href="{% url "admin_product" %}" class="menu-link {% if 'admin_product' in request.path %}active{% endif %}"><i class="icon home"></i>Product</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+
+  {% block content %}
+  
+  
+  
+  {% endblock content %}
+
+<script>
+  $('#summernote').summernote({
+    tabsize: 2,
+    toolbar: [
+      ['style', ['style']],
+      ['font', ['bold', 'underline', 'clear']],
+      ['fontname', ['fontname']],
+      ['fontsize', ['fontsize']],
+      ['color', ['color']],
+      ['para', ['paragraph']],
+      ['table', ['table']],
+      ['insert', ['link', 'unlink', 'picture', 'video']], // custom button
+      ['view', ['fullscreen']],
+      ['history', ['undo', 'redo']],
+      ['para', ['height', 'align']]
+    ],
+    // buttons: {
+    //   codeblock: function (context) {
+    //     var ui = $.summernote.ui;
+    //     var button = ui.button({
+    //       contents: '<i class="fa fa-code"></i> Code',
+    //       tooltip: 'Insert Code Block',
+    //       click: function () {
+    //         context.invoke('editor.insertNode', (function () {
+    //           // wrapper
+    //           var wrapper = document.createElement('div');
+    //           wrapper.className = 'code-block-wrapper';
+
+    //           // copy button
+    //           var copyBtn = document.createElement('button');
+    //           copyBtn.className = 'copy-btn';
+    //           copyBtn.innerText = 'Copy';
+    //           copyBtn.onclick = function () {
+    //             var codeText = code.innerText;
+    //             navigator.clipboard.writeText(codeText).then(() => {
+    //               copyBtn.innerText = 'Copied!';
+    //               setTimeout(() => copyBtn.innerText = 'Copy', 1500);
+    //             });
+    //           };
+
+    //           // code block
+    //           var pre = document.createElement('pre');
+    //           var code = document.createElement('code');
+    //           code.className = 'language-javascript'; // default
+    //           code.innerText = '// your code here...';
+    //           pre.appendChild(code);
+    //           wrapper.appendChild(pre);
+    //           wrapper.appendChild(copyBtn);
+
+    //           // apply syntax highlighting
+    //           hljs.highlightElement(code);
+
+    //           return wrapper;
+    //         })());
+    //       }
+    //     });
+    //     return button.render();
+    //   }
+    // }
+  });
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+{% extends "dashboard/base.html" %} 
+{% load crispy_forms_tags %} 
+{% block content %}
+
+<div class="content">
+  <h1>Welcome to Your Project</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <form method="POST" enctype="multipart/form-data" >
+                    {% csrf_token %}
+                    {{form | crispy}}
+                    <input type="submit" class="btn btn-primary" value="Save">
+                </form> 
+            </div>
+            <div class="col">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Key</th>
+                        <th scope="col">Value</th>
+                        <th scope="col">Taka</th>
+                        <th scope="col">Edit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in data %}
+                            <tr>
+                                <th scope="row">{{forloop.counter}}</th>
+                                <td>{{s.key}}</td>
+                                <td>{{s.value}}</td>
+                                <td>{{s.price}}</td>
+                                <td>
+                                    <a href="{% url "admin_edit_specification" s.product.id s.id %}" class="btn btn-secondary">Edit Spec.</a>
+                                    <a href="{% url "admin_delete_specification" s.product.id s.id %}" class="btn btn-primary">Delete</a> 
+                                
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        
+                    </tbody>
+                    </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
