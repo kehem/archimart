@@ -6,6 +6,7 @@ from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from asgiref.sync import sync_to_async
 from django.http import JsonResponse
+from .decorators import async_login_required 
 # Create your views here.
 
 async def home(request):
@@ -13,13 +14,13 @@ async def home(request):
     await sync_to_async(response.render)()
     return response
 
-    
+
 async def construction(request):
     response =  TemplateResponse(request, 'archimart/construction.html')
     await sync_to_async(response.render)()
     return response
 
-    
+
 async def search_data(request):
     json = {
 
@@ -357,15 +358,15 @@ async def json_file(request):
 # Dashboard Start After this code 
 ############################################
 
-@login_required
+@async_login_required
 async def dashboard(request):
     response =  TemplateResponse(request,'dashboard/dashboard.html')
     await sync_to_async(response.render)()
     return response
 
-    
+
 # Category start here 
-@login_required
+@async_login_required
 async def admin_category(request):
     form = CategoryForm()
 
@@ -388,8 +389,8 @@ async def admin_category(request):
     await sync_to_async(response.render)()
     return response
 
-    
-@login_required
+
+@async_login_required
 async def admin_edit_category(request, pk):
     cat_data = await Category.objects.aget(id = pk)
     
@@ -411,15 +412,15 @@ async def admin_edit_category(request, pk):
     await sync_to_async(response.render)()
     return response
 
-    
-@login_required
+
+@async_login_required
 async def admin_delete_category(request, pk):
     cat = await Category.objects.aget(id=pk)
     await cat.adelete()  # ✅ Added await and use adelete()
     return redirect('admin_category')
 
 # Sub Category start Here 
-@login_required
+@async_login_required
 async def admin_subcategory(request):
     
     form = SubCategoryForm()
@@ -440,8 +441,8 @@ async def admin_subcategory(request):
     await sync_to_async(response.render)()
     return response
 
-    
-@login_required
+
+@async_login_required
 async def admin_edit_subcategory(request, pk):
     sub_data = await SubCategory.objects.aget(id=pk)
     data = [sub async for sub in SubCategory.objects.all()]  # ✅ Async iteration
@@ -463,15 +464,15 @@ async def admin_edit_subcategory(request, pk):
     await sync_to_async(response.render)()
     return response
 
-    
-@login_required
+
+@async_login_required
 async def admin_delete_subcategory(request, pk):
     data = await SubCategory.objects.aget(id=pk)
     await data.adelete()  # ✅ Added await and use adelete()
     return redirect('admin_sub_category')
 
 # Sub Sub Category start here 
-@login_required
+@async_login_required
 async def admin_subsubcategory(request):
     data = [sub async for sub in SubSubCategory.objects.all()]  # ✅ Async iteration
     form = SubSubCategoryForm()
@@ -492,8 +493,8 @@ async def admin_subsubcategory(request):
     await sync_to_async(response.render)()
     return response
 
-    
-@login_required
+
+@async_login_required
 async def admin_edit_subsubcategory(request, pk):
     sub_data = await SubSubCategory.objects.aget(id=pk)
     form = SubSubCategoryForm(instance=sub_data)
@@ -515,15 +516,15 @@ async def admin_edit_subsubcategory(request, pk):
     await sync_to_async(response.render)()
     return response
 
-    
-@login_required
+
+@async_login_required
 async def admin_delete_subsubcategory(request, pk):
     data = await SubSubCategory.objects.aget(id=pk)
     await data.adelete()  # ✅ Added await and use adelete()
     return redirect('admin_subsubcategory')
 
 # Product start here 
-@login_required
+@async_login_required
 async def admin_product(request):
     form = ProductForm()
 
@@ -552,8 +553,8 @@ async def admin_product(request):
     await sync_to_async(response.render)()
     return response
 
-    
-@login_required
+
+@async_login_required
 async def admin_edit_product(request, pk):
     p_data = await Product.objects.aget(id=pk)
     
@@ -582,15 +583,15 @@ async def admin_edit_product(request, pk):
     await sync_to_async(response.render)()
     return response
 
-    
-@login_required
+
+@async_login_required
 async def admin_delete_product(request, pk):
     p_data = await Product.objects.aget(id=pk)
     await p_data.adelete()  # ✅ Added await and use adelete()
     return redirect('admin_product')
 
 # Product image start here 
-@login_required
+@async_login_required
 async def admin_productimage(request, product):
     p_data = await Product.objects.aget(id=product)
     p_image = [img async for img in ProductImage.objects.filter(product=p_data)]  # ✅ Async iteration
@@ -615,22 +616,22 @@ async def admin_productimage(request, product):
     await sync_to_async(response.render)()
     return response
 
-    
-@login_required
+
+@async_login_required
 async def admin_edit_productimage(request):
     response =  TemplateResponse(request, 'dashboard/productimage.html')
     await sync_to_async(response.render)()
     return response
 
-    
-@login_required
+
+@async_login_required
 async def admin_delete_productimage(request, pk, product):
     data = await ProductImage.objects.aget(id=pk)
     await data.adelete()  
     return redirect('admin_productimage', product=product)  # ✅ Fixed redirect params
 
 # Specification start here 
-@login_required
+@async_login_required
 async def admin_specification(request, product):
     p_data = await Product.objects.aget(id=product)
     spec = [s async for s in Specification.objects.filter(product=p_data)]
@@ -658,8 +659,8 @@ async def admin_specification(request, product):
     await sync_to_async(response.render)()
     return response
 
-    
-@login_required
+
+@async_login_required
 async def admin_edit_specification(request, product, pk):
     p_data = await Product.objects.aget(id=product)
     spec = [s async for s in Specification.objects.filter(product=p_data)]
@@ -688,9 +689,9 @@ async def admin_edit_specification(request, product, pk):
     await sync_to_async(response.render)()
     return response
 
-    
 
-@login_required
+
+@async_login_required
 async def admin_delete_specification(request, product, pk):
     data = await Specification.objects.aget(id=pk)
     await data.adelete()  # ✅ Added await and use adelete()
