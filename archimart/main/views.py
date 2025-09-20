@@ -9,11 +9,17 @@ from django.http import JsonResponse
 # Create your views here.
 
 async def home(request):
-    return TemplateResponse(request, 'archimart/index.html')
+    response =  TemplateResponse(request, 'archimart/index.html')
+    await sync_to_async(response.render)()
+    return response
 
+    
 async def construction(request):
-    return TemplateResponse(request, 'archimart/construction.html')
+    response =  TemplateResponse(request, 'archimart/construction.html')
+    await sync_to_async(response.render)()
+    return response
 
+    
 async def search_data(request):
     json = {
 
@@ -353,8 +359,11 @@ async def json_file(request):
 
 @login_required
 async def dashboard(request):
-    return TemplateResponse(request,'dashboard/dashboard.html')
+    response =  TemplateResponse(request,'dashboard/dashboard.html')
+    await sync_to_async(response.render)()
+    return response
 
+    
 # Category start here 
 @login_required
 async def admin_category(request):
@@ -375,8 +384,11 @@ async def admin_category(request):
         'form': form,
         'data': data,
     }
-    return TemplateResponse(request, 'dashboard/category.html', context)
+    response =  TemplateResponse(request, 'dashboard/category.html', context)
+    await sync_to_async(response.render)()
+    return response
 
+    
 @login_required
 async def admin_edit_category(request, pk):
     cat_data = await Category.objects.aget(id = pk)
@@ -395,8 +407,11 @@ async def admin_edit_category(request, pk):
         'form': form,
         'data': data,
     }
-    return TemplateResponse(request, 'dashboard/category.html', context)
+    response =  TemplateResponse(request, 'dashboard/category.html', context)
+    await sync_to_async(response.render)()
+    return response
 
+    
 @login_required
 async def admin_delete_category(request, pk):
     cat = await Category.objects.aget(id=pk)
@@ -421,8 +436,11 @@ async def admin_subcategory(request):
         'data': data,
         'form': form,
     }
-    return TemplateResponse(request, 'dashboard/subcategory.html', context)
+    response =  TemplateResponse(request, 'dashboard/subcategory.html', context)
+    await sync_to_async(response.render)()
+    return response
 
+    
 @login_required
 async def admin_edit_subcategory(request, pk):
     sub_data = await SubCategory.objects.aget(id=pk)
@@ -441,8 +459,11 @@ async def admin_edit_subcategory(request, pk):
         'data': data,
         'form': form,
     }
-    return TemplateResponse(request, 'dashboard/subcategory.html', context)
+    response =  TemplateResponse(request, 'dashboard/subcategory.html', context)
+    await sync_to_async(response.render)()
+    return response
 
+    
 @login_required
 async def admin_delete_subcategory(request, pk):
     data = await SubCategory.objects.aget(id=pk)
@@ -467,8 +488,11 @@ async def admin_subsubcategory(request):
         'data': data,
         'form': form,
     }
-    return TemplateResponse(request, 'dashboard/subsubcategory.html', context)
+    response =  TemplateResponse(request, 'dashboard/subsubcategory.html', context)
+    await sync_to_async(response.render)()
+    return response
 
+    
 @login_required
 async def admin_edit_subsubcategory(request, pk):
     sub_data = await SubSubCategory.objects.aget(id=pk)
@@ -487,8 +511,11 @@ async def admin_edit_subsubcategory(request, pk):
         'data': data,
         'form': form,
     }
-    return TemplateResponse(request, 'dashboard/subsubcategory.html', context)
+    response =  TemplateResponse(request, 'dashboard/subsubcategory.html', context)
+    await sync_to_async(response.render)()
+    return response
 
+    
 @login_required
 async def admin_delete_subsubcategory(request, pk):
     data = await SubSubCategory.objects.aget(id=pk)
@@ -521,8 +548,11 @@ async def admin_product(request):
         'form': form,
         'data': page_obj,
     }
-    return TemplateResponse(request, 'dashboard/product.html', context)
+    response =  TemplateResponse(request, 'dashboard/product.html', context)
+    await sync_to_async(response.render)()
+    return response
 
+    
 @login_required
 async def admin_edit_product(request, pk):
     p_data = await Product.objects.aget(id=pk)
@@ -548,8 +578,11 @@ async def admin_edit_product(request, pk):
         'data': page_obj,
         'form': form,
     }
-    return TemplateResponse(request, 'dashboard/product.html', context)
+    response =  TemplateResponse(request, 'dashboard/product.html', context)
+    await sync_to_async(response.render)()
+    return response
 
+    
 @login_required
 async def admin_delete_product(request, pk):
     p_data = await Product.objects.aget(id=pk)
@@ -578,12 +611,18 @@ async def admin_productimage(request, product):
         'data': p_image,
         'form': form,
     }
-    return TemplateResponse(request, 'dashboard/productimage.html', context)
+    response =  TemplateResponse(request, 'dashboard/productimage.html', context)
+    await sync_to_async(response.render)()
+    return response
 
+    
 @login_required
 async def admin_edit_productimage(request):
-    return TemplateResponse(request, 'dashboard/productimage.html')
+    response =  TemplateResponse(request, 'dashboard/productimage.html')
+    await sync_to_async(response.render)()
+    return response
 
+    
 @login_required
 async def admin_delete_productimage(request, pk, product):
     data = await ProductImage.objects.aget(id=pk)
@@ -615,8 +654,11 @@ async def admin_specification(request, product):
         'data': spec,
         'form': form,
     }
-    return TemplateResponse(request, 'dashboard/specification.html', context)
+    response =  TemplateResponse(request, 'dashboard/specification.html', context)
+    await sync_to_async(response.render)()
+    return response
 
+    
 @login_required
 async def admin_edit_specification(request, product, pk):
     p_data = await Product.objects.aget(id=product)
@@ -642,8 +684,11 @@ async def admin_edit_specification(request, product, pk):
         'data': spec,
         'form': form,
     }
-    return TemplateResponse(request, 'dashboard/specification.html', context)
+    response =  TemplateResponse(request, 'dashboard/specification.html', context)
+    await sync_to_async(response.render)()
+    return response
 
+    
 
 @login_required
 async def admin_delete_specification(request, product, pk):
