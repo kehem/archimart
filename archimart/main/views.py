@@ -4,24 +4,18 @@ from .forms import *
 from django.shortcuts import redirect
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-from asgiref.sync import sync_to_async
 from django.http import JsonResponse
-from .decorators import async_login_required 
 # Create your views here.
 
-async def home(request):
-    response =  TemplateResponse(request, 'archimart/index.html')
-    await sync_to_async(response.render)()
-    return response
+def home(request):
+    return TemplateResponse(request, 'archimart/index.html')
 
 
-async def construction(request):
-    response =  TemplateResponse(request, 'archimart/construction.html')
-    await sync_to_async(response.render)()
-    return response
+def construction(request):
+    return TemplateResponse(request, 'archimart/construction.html')
 
 
-async def search_data(request):
+def search_data(request):
     json = {
 
         "count": 2,
@@ -301,7 +295,6 @@ async def search_data(request):
         }
     return JsonResponse(json)
 
-@sync_to_async
 def get_paginated_products(page_number, per_page, category=None, sub_category=None, sub_sub_category=None):
     products_qs = Product.objects.prefetch_related(
         "productimage_set", "specification_set"
@@ -342,14 +335,14 @@ def get_paginated_products(page_number, per_page, category=None, sub_category=No
         "results": results,
     }
 
-async def json_file(request):
+def json_file(request):
     category = request.GET.get("category")
     sub_category = request.GET.get("subcategory")
     sub_sub_category = request.GET.get("subsubcategory")
     page_number = int(request.GET.get("page", 1))
     per_page = int(request.GET.get("per_page", 10))
     
-    data = await get_paginated_products(
+    data = get_paginated_products(
         page_number, per_page, category, sub_category, sub_sub_category
     )
     return JsonResponse(data, safe=False)
@@ -358,293 +351,251 @@ async def json_file(request):
 # Dashboard Start After this code 
 ############################################
 
-@async_login_required
-async def dashboard(request):
-    response =  TemplateResponse(request,'dashboard/dashboard.html')
-    await sync_to_async(response.render)()
-    return response
+@login_required
+def dashboard(request):
+    return TemplateResponse(request,'dashboard/dashboard.html')
 
 
 # Category start here 
-@async_login_required
-async def admin_category(request):
+@login_required
+def admin_category(request):
     form = CategoryForm()
 
     if request.method == 'POST':
         form = CategoryForm(request.POST or None, request.FILES or None)
         if form.is_valid():
-            category = form.save(commit=False)
-            await category.asave()
+            form.save()
             return redirect('admin_category')
         else:
             print (form.errors)
 
-    data = [category async for category in Category.objects.all()]  # ✅ Async iteration
+    data = Category.objects.all()
 
     context = {
         'form': form,
         'data': data,
     }
-    response =  TemplateResponse(request, 'dashboard/category.html', context)
-    await sync_to_async(response.render)()
-    return response
+    return TemplateResponse(request, 'dashboard/category.html', context)
 
 
-@async_login_required
-async def admin_edit_category(request, pk):
-    cat_data = await Category.objects.aget(id = pk)
+@login_required
+def admin_edit_category(request, pk):
+    cat_data = Category.objects.get(id=pk)
     
-
     form = CategoryForm(instance=cat_data)
 
     if request.method == 'POST':
         form = CategoryForm(request.POST or None, request.FILES or None, instance=cat_data)
         if form.is_valid():
-            data = form.save(commit=False)
-            await data.asave() 
+            form.save()
             return redirect('admin_category')
-    data = [category async for category in Category.objects.all()]
+            
+    data = Category.objects.all()
     context = {
         'form': form,
         'data': data,
     }
-    response =  TemplateResponse(request, 'dashboard/category.html', context)
-    await sync_to_async(response.render)()
-    return response
+    return TemplateResponse(request, 'dashboard/category.html', context)
 
 
-@async_login_required
-async def admin_delete_category(request, pk):
-    cat = await Category.objects.aget(id=pk)
-    await cat.adelete()  # ✅ Added await and use adelete()
+@login_required
+def admin_delete_category(request, pk):
+    cat = Category.objects.get(id=pk)
+    cat.delete()
     return redirect('admin_category')
 
 # Sub Category start Here 
-@async_login_required
-async def admin_subcategory(request):
+@login_required
+def admin_subcategory(request):
     
     form = SubCategoryForm()
     
     if request.method == 'POST':
         form = SubCategoryForm(request.POST or None, request.FILES or None)
-        is_valid = await sync_to_async(form.is_valid)()
-        if is_valid:
-            subcategory = form.save(commit=False)
-            await subcategory.asave()  
+        if form.is_valid():
+            form.save()
             return redirect('admin_sub_category')
-    data = [sub async for sub in SubCategory.objects.all()]    
+            
+    data = SubCategory.objects.all()
     context = {
         'data': data,
         'form': form,
     }
-    response =  TemplateResponse(request, 'dashboard/subcategory.html', context)
-    await sync_to_async(response.render)()
-    return response
+    return TemplateResponse(request, 'dashboard/subcategory.html', context)
 
 
-@async_login_required
-async def admin_edit_subcategory(request, pk):
-    sub_data = await SubCategory.objects.aget(id=pk)
-    data = [sub async for sub in SubCategory.objects.all()]  # ✅ Async iteration
+@login_required
+def admin_edit_subcategory(request, pk):
+    sub_data = SubCategory.objects.get(id=pk)
+    data = SubCategory.objects.all()
     form = SubCategoryForm(instance=sub_data)
     
     if request.method == 'POST':
         form = SubCategoryForm(request.POST or None, request.FILES or None, instance=sub_data)
-        is_valid = await sync_to_async(form.is_valid)()
-        if is_valid:
-            subcategory = form.save(commit=False)
-            await subcategory.asave()  # ✅ Added await
+        if form.is_valid():
+            form.save()
             return redirect('admin_sub_category')
             
     context = {
         'data': data,
         'form': form,
     }
-    response =  TemplateResponse(request, 'dashboard/subcategory.html', context)
-    await sync_to_async(response.render)()
-    return response
+    return TemplateResponse(request, 'dashboard/subcategory.html', context)
 
 
-@async_login_required
-async def admin_delete_subcategory(request, pk):
-    data = await SubCategory.objects.aget(id=pk)
-    await data.adelete()  # ✅ Added await and use adelete()
+@login_required
+def admin_delete_subcategory(request, pk):
+    data = SubCategory.objects.get(id=pk)
+    data.delete()
     return redirect('admin_sub_category')
 
 # Sub Sub Category start here 
-@async_login_required
-async def admin_subsubcategory(request):
-    data = [sub async for sub in SubSubCategory.objects.all()]  # ✅ Async iteration
+@login_required
+def admin_subsubcategory(request):
+    data = SubSubCategory.objects.all()
     form = SubSubCategoryForm()
     
     if request.method == 'POST':
         form = SubSubCategoryForm(request.POST or None, request.FILES or None)
-        is_valid = await sync_to_async(form.is_valid)()
-        if is_valid:
-            subsubcategory = form.save(commit=False)
-            await subsubcategory.asave()  # ✅ Added await
+        if form.is_valid():
+            form.save()
             return redirect('admin_subsubcategory')
             
     context = {
         'data': data,
         'form': form,
     }
-    response =  TemplateResponse(request, 'dashboard/subsubcategory.html', context)
-    await sync_to_async(response.render)()
-    return response
+    return TemplateResponse(request, 'dashboard/subsubcategory.html', context)
 
 
-@async_login_required
-async def admin_edit_subsubcategory(request, pk):
-    sub_data = await SubSubCategory.objects.aget(id=pk)
+@login_required
+def admin_edit_subsubcategory(request, pk):
+    sub_data = SubSubCategory.objects.get(id=pk)
     form = SubSubCategoryForm(instance=sub_data)
     
     if request.method == 'POST':
         form = SubSubCategoryForm(request.POST or None, request.FILES or None, instance=sub_data)
-        is_valid = await sync_to_async(form.is_valid)()
-        if is_valid:
-            subsubcategory = form.save(commit=False)
-            await subsubcategory.asave()  # ✅ Added await
+        if form.is_valid():
+            form.save()
             return redirect('admin_subsubcategory')
     
-    data = [sub async for sub in SubSubCategory.objects.all()]  # ✅ Async iteration
+    data = SubSubCategory.objects.all()
     context = {
         'data': data,
         'form': form,
     }
-    response =  TemplateResponse(request, 'dashboard/subsubcategory.html', context)
-    await sync_to_async(response.render)()
-    return response
+    return TemplateResponse(request, 'dashboard/subsubcategory.html', context)
 
 
-@async_login_required
-async def admin_delete_subsubcategory(request, pk):
-    data = await SubSubCategory.objects.aget(id=pk)
-    await data.adelete()  # ✅ Added await and use adelete()
+@login_required
+def admin_delete_subsubcategory(request, pk):
+    data = SubSubCategory.objects.get(id=pk)
+    data.delete()
     return redirect('admin_subsubcategory')
 
 # Product start here 
-@async_login_required
-async def admin_product(request):
+@login_required
+def admin_product(request):
     form = ProductForm()
 
     if request.method == 'POST':
         form = ProductForm(request.POST or None, request.FILES or None)
-        is_valid = await sync_to_async(form.is_valid)()
-        if is_valid:
-            product = form.save(commit=False)
-            await product.asave()  # ✅ Added await
+        if form.is_valid():
+            form.save()
             return redirect('admin_product')
 
-    # ✅ Proper async queryset handling for pagination
-    product_queryset = Product.objects.all()
-    product_list = await sync_to_async(list)(product_queryset)
-
     # Pagination setup
+    product_queryset = Product.objects.all()
     page_number = request.GET.get('page', 1)
-    paginator = Paginator(product_list, 10)
+    paginator = Paginator(product_queryset, 10)
     page_obj = paginator.get_page(page_number)
 
     context = {
         'form': form,
         'data': page_obj,
     }
-    response =  TemplateResponse(request, 'dashboard/product.html', context)
-    await sync_to_async(response.render)()
-    return response
+    return TemplateResponse(request, 'dashboard/product.html', context)
 
 
-@async_login_required
-async def admin_edit_product(request, pk):
-    p_data = await Product.objects.aget(id=pk)
+@login_required
+def admin_edit_product(request, pk):
+    p_data = Product.objects.get(id=pk)
     
     form = ProductForm(instance=p_data)
     if request.method == 'POST':
         form = ProductForm(request.POST or None, request.FILES or None, instance=p_data)
-        is_valid = await sync_to_async(form.is_valid)()
-        if is_valid:
-            product = form.save(commit=False)
-            await product.asave()  # ✅ Added await
+        if form.is_valid():
+            form.save()
             return redirect('admin_product')
             
-    # ✅ Proper async handling
+    # Pagination setup
     product_queryset = Product.objects.all()
-    data = await sync_to_async(list)(product_queryset)
-    
     page_number = request.GET.get('page', 1)
-    paginator = Paginator(data, 10)
+    paginator = Paginator(product_queryset, 10)
     page_obj = paginator.get_page(page_number)
     
     context = {
         'data': page_obj,
         'form': form,
     }
-    response =  TemplateResponse(request, 'dashboard/product.html', context)
-    await sync_to_async(response.render)()
-    return response
+    return TemplateResponse(request, 'dashboard/product.html', context)
 
 
-@async_login_required
-async def admin_delete_product(request, pk):
-    p_data = await Product.objects.aget(id=pk)
-    await p_data.adelete()  # ✅ Added await and use adelete()
+@login_required
+def admin_delete_product(request, pk):
+    p_data = Product.objects.get(id=pk)
+    p_data.delete()
     return redirect('admin_product')
 
 # Product image start here 
-@async_login_required
-async def admin_productimage(request, product):
-    p_data = await Product.objects.aget(id=product)
-    p_image = [img async for img in ProductImage.objects.filter(product=p_data)]  # ✅ Async iteration
+@login_required
+def admin_productimage(request, product):
+    p_data = Product.objects.get(id=product)
+    p_image = ProductImage.objects.filter(product=p_data)
     form = ProductImageForm()
     form.fields['product'].widget = forms.HiddenInput()      # 👈 Hide field
     form.fields['product'].initial = p_data.id      
+    
     if request.method == 'POST':
         form = ProductImageForm(request.POST or None, request.FILES or None)
         form.fields['product'].widget = forms.HiddenInput()      # 👈 Hide field
         form.fields['product'].initial = p_data.id               # 👈 Set value
-        is_valid = await sync_to_async(form.is_valid)()
-        if is_valid:
-            pro = form.save(commit=False)
-            await pro.asave()  
+        if form.is_valid():
+            form.save()
             return redirect('admin_productimage', product=product)
             
     context = {
         'data': p_image,
         'form': form,
     }
-    response =  TemplateResponse(request, 'dashboard/productimage.html', context)
-    await sync_to_async(response.render)()
-    return response
+    return TemplateResponse(request, 'dashboard/productimage.html', context)
 
 
-@async_login_required
-async def admin_edit_productimage(request):
-    response =  TemplateResponse(request, 'dashboard/productimage.html')
-    await sync_to_async(response.render)()
-    return response
+@login_required
+def admin_edit_productimage(request):
+    return TemplateResponse(request, 'dashboard/productimage.html')
 
 
-@async_login_required
-async def admin_delete_productimage(request, pk, product):
-    data = await ProductImage.objects.aget(id=pk)
-    await data.adelete()  
-    return redirect('admin_productimage', product=product)  # ✅ Fixed redirect params
+@login_required
+def admin_delete_productimage(request, pk, product):
+    data = ProductImage.objects.get(id=pk)
+    data.delete()
+    return redirect('admin_productimage', product=product)
 
 # Specification start here 
-@async_login_required
-async def admin_specification(request, product):
-    p_data = await Product.objects.aget(id=product)
-    spec = [s async for s in Specification.objects.filter(product=p_data)]
+@login_required
+def admin_specification(request, product):
+    p_data = Product.objects.get(id=product)
+    spec = Specification.objects.filter(product=p_data)
 
     if request.method == 'POST':
         form = SpecificationForm(request.POST, request.FILES)
         form.fields['product'].widget = forms.HiddenInput()      # 👈 Hide field
         form.fields['product'].initial = p_data.id               # 👈 Set value
-        is_valid = await sync_to_async(form.is_valid)()
-        if is_valid:
+        if form.is_valid():
             specification = form.save(commit=False)
             specification.product = p_data                       # 👈 Ensure correct product
-            await specification.asave()
+            specification.save()
             return redirect('admin_specification', product=product)
     else:
         form = SpecificationForm()
@@ -655,26 +606,23 @@ async def admin_specification(request, product):
         'data': spec,
         'form': form,
     }
-    response =  TemplateResponse(request, 'dashboard/specification.html', context)
-    await sync_to_async(response.render)()
-    return response
+    return TemplateResponse(request, 'dashboard/specification.html', context)
 
 
-@async_login_required
-async def admin_edit_specification(request, product, pk):
-    p_data = await Product.objects.aget(id=product)
-    spec = [s async for s in Specification.objects.filter(product=p_data)]
-    s = await Specification.objects.aget(id=pk)
+@login_required
+def admin_edit_specification(request, product, pk):
+    p_data = Product.objects.get(id=product)
+    spec = Specification.objects.filter(product=p_data)
+    s = Specification.objects.get(id=pk)
 
     if request.method == 'POST':
         form = SpecificationForm(request.POST, request.FILES, instance=s)
         form.fields['product'].widget = forms.HiddenInput()      # 👈 Hide field
         form.fields['product'].initial = p_data.id               # 👈 Set value
-        is_valid = await sync_to_async(form.is_valid)()
-        if is_valid:
+        if form.is_valid():
             specification = form.save(commit=False)
             specification.product = p_data                       # 👈 Ensure correct product
-            await specification.asave()
+            specification.save()
             return redirect('admin_specification', product=product)
     else:
         form = SpecificationForm(instance=s)
@@ -685,14 +633,11 @@ async def admin_edit_specification(request, product, pk):
         'data': spec,
         'form': form,
     }
-    response =  TemplateResponse(request, 'dashboard/specification.html', context)
-    await sync_to_async(response.render)()
-    return response
+    return TemplateResponse(request, 'dashboard/specification.html', context)
 
 
-
-@async_login_required
-async def admin_delete_specification(request, product, pk):
-    data = await Specification.objects.aget(id=pk)
-    await data.adelete()  # ✅ Added await and use adelete()
+@login_required
+def admin_delete_specification(request, product, pk):
+    data = Specification.objects.get(id=pk)
+    data.delete()
     return redirect('admin_specification', product=product)
