@@ -319,6 +319,12 @@ def get_paginated_products(page_number, per_page, category=None, sub_category=No
             "price": product.price,
             "currency": product.currency,
             "description": product.description,
+            'recomended_title': product.recomended_title,
+            'recomended_text': product.recomended_text,
+            'category': product.subsubcategory.subcategory.category.name,
+            "subcategory": product.subsubcategory.subcategory.name,
+            "subsubcategory": product.subsubcategory.name,
+
             "images": [img.image.url for img in product.productimage_set.all()],
             "specifications": [
                 {"key": spec.key, "value": spec.value, "price": spec.price}
