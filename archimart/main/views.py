@@ -302,11 +302,11 @@ def get_paginated_products(page_number, per_page, category=None, sub_category=No
 
     # Apply filters if provided
     if category:
-        products_qs = products_qs.filter(category=category)
+        products_qs = products_qs.filter(subsubcategory__subcategory__category=category)
     if sub_category:
-        products_qs = products_qs.filter(sub_category=sub_category)
+        products_qs = products_qs.filter(subsubcategory__subcategory=sub_category)
     if sub_sub_category:
-        products_qs = products_qs.filter(sub_sub_category=sub_sub_category)
+        products_qs = products_qs.filter(subsubcategory=sub_sub_category)
 
     paginator = Paginator(products_qs, per_page)
     page_obj = paginator.get_page(page_number)
