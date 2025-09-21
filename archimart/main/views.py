@@ -295,7 +295,7 @@ def search_data(request):
         }
     return JsonResponse(json)
 
-def get_paginated_products(page_number, per_page, category=None, sub_category=None, sub_sub_category=None):
+def get_paginated_products(request,page_number, per_page, category=None, sub_category=None, sub_sub_category=None):
     products_qs = Product.objects.prefetch_related(
         "productimage_set", "specification_set"
     ).order_by("id")
@@ -325,10 +325,10 @@ def get_paginated_products(page_number, per_page, category=None, sub_category=No
             "subcategory": product.subsubcategory.subcategory.name,
             "subsubcategory": product.subsubcategory.name,
 
-            "images": [img.image.url for img in product.productimage_set.all()],
+            "images": [request.build_absolute_uri(img.image.url) for img in product.productimage_set.all()],
             "specifications": [
-                {"key": spec.key, "value": spec.value, "price": spec.price}
-                for spec in product.specification_set.all()
+            {"key": spec.key, "value": spec.value, "price": spec.price}
+            for spec in product.specification_set.all()
             ]
         })
 
@@ -349,7 +349,7 @@ def json_file(request):
     per_page = int(request.GET.get("per_page", 10))
     
     data = get_paginated_products(
-        page_number, per_page, category, sub_category, sub_sub_category
+        request,page_number, per_page, category, sub_category, sub_sub_category
     )
     return JsonResponse(data, safe=False)
 
