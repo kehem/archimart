@@ -299,7 +299,7 @@ def get_paginated_products(request,page_number, per_page, category=None, sub_cat
     products_qs = Product.objects.prefetch_related(
         "productimage_set", "specification_set"
     ).order_by("id")
-
+    print (category, sub_category, sub_sub_category)
     # Apply filters if provided
     if category:
         products_qs = products_qs.filter(subsubcategory__subcategory__category__name=category)
