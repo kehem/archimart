@@ -55,41 +55,63 @@
     </div>
 </div>
 <script>
-  function refreshSimilarProducts(subId, currentId) {
-  $.getJSON("{% url 'ajax_similar_products' %}", {
-    subsubcategory_id: subId,
-    current_id: currentId
-  }, function (data) {
-    const $select = $('select.dual-listbox');
-    const selected = $select.val() || [];
-
-    $select.empty();
-    data.forEach(item => {
-      const isSelected = selected.includes(String(item.id));
-      const option = new Option(item.name, item.id, false, isSelected);
-      $select.append(option);
-    });
-
-    // ✅ Reinitialize plugin
-    $select.bootstrapDualListbox('refresh', true);
-  });
-}
-
   $(function () {
+    const $select = $('select.dual-listbox');
     const currentId = "{{ form.instance.pk|default:'' }}";
 
-    $('#id_subsubcategory').on('change', function () {
-      const subId = $(this).val();
-      refreshSimilarProducts(subId, currentId);
+    // Initialize dual listbox on page load
+    $select.bootstrapDualListbox({
+      nonSelectedListLabel: 'Available products',
+      selectedListLabel: 'Similar products',
+      moveOnSelect: false,
+      preserveSelectionOnMove: 'moved',
+      infoText: 'Showing all {0}',
+      infoTextEmpty: 'No products available',
+      filterPlaceHolder: 'Filter',
+      selectorMinimalHeight: 200
     });
 
-    // Initial load if editing
+    // Function to refresh options based on subsubcategory
+    function refreshSimilarProducts(subId) {
+      $.getJSON("{% url 'ajax_similar_products' %}", {
+        subsubcategory_id: subId,
+        current_id: currentId
+      }, function (data) {
+        const selected = $select.val() || [];
+
+        $select.empty(); // Clear existing options
+
+        if (data.length === 0) {
+          $select.append(new Option("No products found", "", false, false));
+        } else {
+          data.forEach(item => {
+            const isSelected = selected.includes(String(item.id));
+            const option = new Option(item.name, item.id, false, isSelected);
+            $select.append(option);
+          });
+        }
+
+        // Reinitialize plugin after updating options
+        $select.bootstrapDualListbox('refresh', true);
+      });
+    }
+
+    // Trigger refresh when subsubcategory changes
+    $('#id_subsubcategory').on('change', function () {
+      const subId = $(this).val();
+      if (subId) {
+        refreshSimilarProducts(subId);
+      }
+    });
+
+    // Initial load for edit view
     const initialSubId = $('#id_subsubcategory').val();
     if (initialSubId) {
-      refreshSimilarProducts(initialSubId, currentId);
+      refreshSimilarProducts(initialSubId);
     }
   });
 </script>
+
 
 
 
