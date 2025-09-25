@@ -21,19 +21,23 @@ class SubSubCategoryForm(forms.ModelForm):
 
 
 
-class ProductForm(forms.ModelForm):
-    class Meta:
-        model = Product
-        fields = "__all__"
-        widgets = {
-            "similar_products": Select2MultipleWidget(attrs={"data-placeholder": "Select similar products"}),
-        }
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Field, Submit
 
+class ProductForm(forms.ModelForm):
+    ...
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Optional: exclude self from similar_products
-        if self.instance and self.instance.pk:
-            self.fields["similar_products"].queryset = Product.objects.exclude(pk=self.instance.pk)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Field("name"),
+            Field("price"),
+            Field("currency"),
+            Field("description"),
+            Field("subsubcategory"),
+            Field("similar_products", css_class="dual-listbox"),
+            Submit("submit", "Save", css_class="btn btn-primary")
+        )
 
 
 class ProductImageForm(forms.ModelForm):
