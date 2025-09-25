@@ -33,7 +33,7 @@ class Product(models.Model):
     description = models.TextField()
     recomended_title = models.CharField(max_length=100,null=True,blank=True)
     recomended_text = models.TextField(null=True,blank=True)
-    subsubcategory = models.ForeignKey(SubSubCategory,on_delete=models.CASCADE,related_name='subsubcategory')
+    subsubcategory = models.ForeignKey(SubSubCategory, on_delete=models.CASCADE, related_name='products')
     # Self-referential ManyToMany
     similar_products = models.ManyToManyField(
         "self",
