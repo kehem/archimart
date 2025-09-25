@@ -21,11 +21,16 @@ class SubSubCategoryForm(forms.ModelForm):
 
 
 
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Field, Submit
-
 class ProductForm(forms.ModelForm):
-    ...
+    class Meta:
+        model = Product
+        fields = "__all__"
+        widgets = {
+            "similar_products": forms.SelectMultiple(
+                attrs={"class": "dual-listbox", "size": "10"}
+            ),
+        }
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -38,7 +43,6 @@ class ProductForm(forms.ModelForm):
             Field("similar_products", css_class="dual-listbox"),
             Submit("submit", "Save", css_class="btn btn-primary")
         )
-
 
 class ProductImageForm(forms.ModelForm):
     class Meta:
