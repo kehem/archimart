@@ -24,20 +24,16 @@ class SubSubCategoryForm(forms.ModelForm):
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = [
-            'name',
-            'price',
-            'currency',
-            'description',
-            'recomended_title',
-            'recomended_text',
-            'subsubcategory',
-            'similar_products',
-        ]
+        fields = "__all__"
         widgets = {
-            'similar_products': Select2MultipleWidget(attrs={'class': 'form-control'}),
+            "similar_products": Select2MultipleWidget(attrs={"data-placeholder": "Select similar products"}),
         }
-    # Rest of the form (FormHelper, etc.) remains the same
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Optional: exclude self from similar_products
+        if self.instance and self.instance.pk:
+            self.fields["similar_products"].queryset = Product.objects.exclude(pk=self.instance.pk)
 
 
 class ProductImageForm(forms.ModelForm):
