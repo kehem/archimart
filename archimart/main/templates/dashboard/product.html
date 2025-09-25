@@ -16,16 +16,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-duallistbox/4.0.2/jquery.bootstrap-duallistbox.min.js"></script>
 
   <h1>Welcome to Your Project</h1>
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col">
+            <div class="col-md-8">
                 <form method="POST" enctype="multipart/form-data" >
                     {% csrf_token %}
                     {{form | crispy}}
                     <input type="submit" class="btn btn-primary" value="Save">
                 </form> 
             </div>
-            <div class="col">
+            <div class="col-md-4">
                 <table class="table table-striped">
                     <thead>
                         <tr>
