@@ -1,5 +1,10 @@
 {% extends "dashboard/base.html" %} 
 {% load crispy_forms_tags %} 
+{% load django_select2 %}
+{% select2_css %}
+{% select2_js %}
+
+
 {% block content %}
 
 <div class="content">
@@ -46,16 +51,5 @@
         </div>
     </div>
 </div>
-<script>
-  $(function () {
-    $('select.dual-listbox').bootstrapDualListbox({
-      nonSelectedListLabel: 'Available products',
-      selectedListLabel: 'Similar products',
-      moveOnSelect: false,
-      preserveSelectionOnMove: 'moved',
-      infoText: 'Showing all {0}',
-      infoTextEmpty: 'No products available',
-    });
-  });
-</script>
+
 {% endblock content %}

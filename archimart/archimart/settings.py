@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # remove "bootstrap4" unless you explicitly need it
     'crispy_forms',
     'crispy_bootstrap4',
+    'django_select2',
 ]
 
 
