@@ -1,6 +1,7 @@
 from django import forms
 from .models import *
-
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Field, Submit
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
@@ -21,32 +22,36 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = [
-            "name", "price", "currency", "description",
-            "recomended_title", "recomended_text", "subsubcategory",
-            "similar_products",
+            'name',
+            'price',
+            'currency',
+            'description',
+            'recomended_title',
+            'recomended_text',
+            'subsubcategory',
+            'similar_products',
         ]
         widgets = {
-            "similar_products": forms.SelectMultiple(
-                attrs={"class": "duallistbox", "size": "10"}
-            ),
+            'similar_products': forms.SelectMultiple(attrs={'class': 'form-control'}),
         }
 
     def __init__(self, *args, **kwargs):
-        # Expect instance when editing; helps exclude self and scope options
         super().__init__(*args, **kwargs)
-        # Default queryset: all products
-        qs = Product.objects.all()
-        # Exclude self from selectable options
-        if self.instance and self.instance.pk:
-            qs = qs.exclude(pk=self.instance.pk)
-            # Optional: scope to same subsubcategory for relevance
-            if self.instance.subsubcategory_id:
-                qs = qs.filter(subsubcategory_id=self.instance.subsubcategory_id)
-        self.fields["similar_products"].queryset = qs
-        # Optional: readable labels
-        self.fields["similar_products"].label = "Similar products"
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.layout = Layout(
+            Field('name', css_class='form-control'),
+            Field('price', css_class='form-control'),
+            Field('currency', css_class='form-control'),
+            Field('description', css_class='form-control'),
+            Field('recomended_title', css_class='form-control'),
+            Field('recomended_text', css_class='form-control'),
+            Field('subsubcategory', css_class='form-control'),
+            Field('similar_products', css_class='form-control'),
+            Submit('submit', 'Save Product', css_class='btn btn-primary')
+        )
 
-        
+
 class ProductImageForm(forms.ModelForm):
     class Meta:
         model = ProductImage
