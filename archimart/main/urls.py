@@ -33,6 +33,8 @@ urlpatterns = [
     
 
     path('api/properties',views.search_data,name="search"),
+    path("ajax/similar-products/", views.get_similar_products, name="ajax_similar_products"),
+
 ]
 
 if settings.DEBUG:

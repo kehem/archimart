@@ -30,7 +30,12 @@ class ProductForm(forms.ModelForm):
                 attrs={"class": "dual-listbox", "size": "10"}
             ),
         }
-        
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Leave queryset empty initially; populate via AJAX
+        self.fields["similar_products"].queryset = Product.objects.none()
+
 
 class ProductImageForm(forms.ModelForm):
     class Meta:

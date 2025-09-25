@@ -353,6 +353,21 @@ def json_file(request):
     )
     return JsonResponse(data, safe=False)
 
+
+def get_similar_products(request):
+    sub_id = request.GET.get("subsubcategory_id")
+    current_id = request.GET.get("current_id")
+    products = Product.objects.none()
+
+    if sub_id:
+        products = Product.objects.filter(subsubcategory_id=sub_id)
+        if current_id:
+            products = products.exclude(pk=current_id)
+
+    data = [{"id": p.pk, "name": p.name} for p in products]
+    return JsonResponse(data, safe=False)
+
+
 #######################################
 # Dashboard Start After this code 
 ############################################

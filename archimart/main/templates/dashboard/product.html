@@ -15,8 +15,6 @@
 <!-- ✅ Working Dual Listbox JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap4-duallistbox@4.0.2/dist/jquery.bootstrap-duallistbox.min.js"></script>
 
-
-
   <h1>Welcome to Your Project</h1>
     <div class="container-fluid">
         <div class="row">
@@ -57,19 +55,41 @@
     </div>
 </div>
 <script>
-  $(function () {
-    $('select.dual-listbox').bootstrapDualListbox({
-      nonSelectedListLabel: 'Available products',
-      selectedListLabel: 'Similar products',
-      moveOnSelect: false,
-      preserveSelectionOnMove: 'moved',
-      infoText: 'Showing all {0}',
-      infoTextEmpty: 'No products available',
-      filterPlaceHolder: 'Filter',
-      selectorMinimalHeight: 200
+  function refreshSimilarProducts(subId, currentId) {
+    $.getJSON("{% url 'ajax_similar_products' %}", {
+      subsubcategory_id: subId,
+      current_id: currentId
+    }, function (data) {
+      const $select = $('select.dual-listbox');
+      const selected = $select.val() || [];
+
+      $select.empty();
+      data.forEach(item => {
+        const isSelected = selected.includes(String(item.id));
+        const option = new Option(item.name, item.id, false, isSelected);
+        $select.append(option);
+      });
+
+      $select.bootstrapDualListbox('refresh', true);
     });
+  }
+
+  $(function () {
+    const currentId = "{{ form.instance.pk|default:'' }}";
+
+    $('#id_subsubcategory').on('change', function () {
+      const subId = $(this).val();
+      refreshSimilarProducts(subId, currentId);
+    });
+
+    // Initial load if editing
+    const initialSubId = $('#id_subsubcategory').val();
+    if (initialSubId) {
+      refreshSimilarProducts(initialSubId, currentId);
+    }
   });
 </script>
+
 
 
 
