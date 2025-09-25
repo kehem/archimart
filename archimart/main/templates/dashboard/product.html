@@ -56,23 +56,24 @@
 </div>
 <script>
   function refreshSimilarProducts(subId, currentId) {
-    $.getJSON("{% url 'ajax_similar_products' %}", {
-      subsubcategory_id: subId,
-      current_id: currentId
-    }, function (data) {
-      const $select = $('select.dual-listbox');
-      const selected = $select.val() || [];
+  $.getJSON("{% url 'ajax_similar_products' %}", {
+    subsubcategory_id: subId,
+    current_id: currentId
+  }, function (data) {
+    const $select = $('select.dual-listbox');
+    const selected = $select.val() || [];
 
-      $select.empty();
-      data.forEach(item => {
-        const isSelected = selected.includes(String(item.id));
-        const option = new Option(item.name, item.id, false, isSelected);
-        $select.append(option);
-      });
-
-      $select.bootstrapDualListbox('refresh', true);
+    $select.empty();
+    data.forEach(item => {
+      const isSelected = selected.includes(String(item.id));
+      const option = new Option(item.name, item.id, false, isSelected);
+      $select.append(option);
     });
-  }
+
+    // ✅ Reinitialize plugin
+    $select.bootstrapDualListbox('refresh', true);
+  });
+}
 
   $(function () {
     const currentId = "{{ form.instance.pk|default:'' }}";
