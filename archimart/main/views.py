@@ -503,7 +503,7 @@ def admin_delete_subsubcategory(request, pk):
 @login_required
 def admin_product(request):
     form = ProductForm()
-
+    print (form)
     if request.method == 'POST':
         form = ProductForm(request.POST or None, request.FILES or None)
         if form.is_valid():
