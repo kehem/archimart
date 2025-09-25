@@ -47,6 +47,15 @@
     </div>
 </div>
 <script>
-  var dualListbox = $('select.dual-listbox').bootstrapDualListbox();
+  $(function () {
+    $('select.dual-listbox').bootstrapDualListbox({
+      nonSelectedListLabel: 'Available products',
+      selectedListLabel: 'Similar products',
+      moveOnSelect: false,
+      preserveSelectionOnMove: 'moved',
+      infoText: 'Showing all {0}',
+      infoTextEmpty: 'No products available',
+    });
+  });
 </script>
 {% endblock content %}
