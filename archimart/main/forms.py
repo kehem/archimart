@@ -30,19 +30,7 @@ class ProductForm(forms.ModelForm):
                 attrs={"class": "dual-listbox", "size": "10"}
             ),
         }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.layout = Layout(
-            Field("name"),
-            Field("price"),
-            Field("currency"),
-            Field("description"),
-            Field("subsubcategory"),
-            Field("similar_products", css_class="dual-listbox"),
-            Submit("submit", "Save", css_class="btn btn-primary")
-        )
+        
 
 class ProductImageForm(forms.ModelForm):
     class Meta:

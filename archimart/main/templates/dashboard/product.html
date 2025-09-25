@@ -6,14 +6,15 @@
 {% block content %}
 
 <div class="content">
+<!-- jQuery first -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!-- Dual Listbox plugin -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-duallistbox/4.0.2/jquery.bootstrap-duallistbox.min.js"></script>
+
 <!-- Dual Listbox CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-duallistbox/4.0.2/bootstrap-duallistbox.min.css">
 
-<!-- jQuery (must be loaded first) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-<!-- Dual Listbox JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-duallistbox/4.0.2/jquery.bootstrap-duallistbox.min.js"></script>
 
   <h1>Welcome to Your Project</h1>
     <div class="container-fluid">
@@ -68,5 +69,6 @@
     });
   });
 </script>
+
 
 {% endblock content %}
