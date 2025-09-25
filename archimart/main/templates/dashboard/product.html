@@ -3,6 +3,10 @@
 {% block content %}
 
 <div class="content">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-duallistbox/4.0.2/bootstrap-duallistbox.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-duallistbox/4.0.2/jquery.bootstrap-duallistbox.min.js"></script>
+
   <h1>Welcome to Your Project</h1>
     <div class="container">
         <div class="row">
@@ -42,5 +46,7 @@
         </div>
     </div>
 </div>
-
+<script>
+  var dualListbox = $('select.dual-listbox').bootstrapDualListbox();
+</script>
 {% endblock content %}
