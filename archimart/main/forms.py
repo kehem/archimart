@@ -21,6 +21,9 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields  = '__all__'
+        widgets = {
+            "similar_products": forms.SelectMultiple(attrs={"class": "dual-listbox"})
+        }
 
 class ProductImageForm(forms.ModelForm):
     class Meta:
