@@ -367,6 +367,44 @@ def get_similar_products(request):
     data = [{"id": p.pk, "name": p.name} for p in products]
     return JsonResponse(data, safe=False)
 
+def single_product(request, pk):
+    try:
+        product = Product.objects.prefetch_related(
+            "productimage_set", "specification_set", "similar_products"
+        ).get(pk=pk)
+    except Product.DoesNotExist:
+        return JsonResponse({"error": "Product not found"}, status=404)
+
+    data = {
+        "id": product.id,
+        "name": product.name,
+        "price": product.price,
+        "currency": product.currency,
+        "description": product.description,
+        'recomended_title': product.recomended_title,
+        'recomended_text': product.recomended_text,
+        'category': product.subsubcategory.subcategory.category.name,
+        "subcategory": product.subsubcategory.subcategory.name,
+        "subsubcategory": product.subsubcategory.name,
+        "images": [request.build_absolute_uri(img.image.url) for img in product.productimage_set.all()],
+        "specifications": [
+            {"key": spec.key, "value": spec.value, "price": spec.price}
+            for spec in product.specification_set.all()
+        ],
+        "similar_products": [
+            {
+                "id": sp.id,
+                "name": sp.name,
+                "price": sp.price,
+                "currency": sp.currency,
+                "images": [request.build_absolute_uri(img.image.url) for img in sp.productimage_set.all()],
+            }
+            for sp in product.similar_products.all()
+        ],
+    }
+
+    return JsonResponse(data, safe=False)
+
 
 #######################################
 # Dashboard Start After this code 
