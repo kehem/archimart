@@ -33,8 +33,12 @@ class ProductForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Leave queryset empty initially; populate via AJAX
-        self.fields["similar_products"].queryset = Product.objects.none()
+
+        if self.instance and self.instance.pk:
+            # Exclude the product itself, but allow all others
+            self.fields["similar_products"].queryset = Product.objects.exclude(pk=self.instance.pk)
+        else:
+            self.fields["similar_products"].queryset = Product.objects.all()
 
 
 class ProductImageForm(forms.ModelForm):
