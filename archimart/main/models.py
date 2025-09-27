@@ -55,6 +55,7 @@ class Specification(models.Model):
     key = models.CharField(max_length=50,choices=(('Weight','Weight'),('Dimensions','Dimensions'),('Size','Size'),('Color','Color'),('Material','Material'),('Other','Other')),default='Other')
     value = models.CharField(max_length=100)
     price = models.IntegerField(default=0,null=True,blank=True)
+    image = ResizedImageField(size=[700,700],quality=85,upload_to="Specification",verbose_name="Specification Image",null=True,blank=True)
 
     def __str__(self):
         return f"{self.key} --> {self.value} --> {self.product.name}"
