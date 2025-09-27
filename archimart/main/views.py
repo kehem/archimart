@@ -388,7 +388,7 @@ def single_product(request, pk):
         "subsubcategory": product.subsubcategory.name,
         "images": [request.build_absolute_uri(img.image.url) for img in product.productimage_set.all()],
         "specifications": [
-            {"key": spec.key, "value": spec.value, "price": spec.price}
+            {"key": spec.key, "value": spec.value, "price": spec.price, "image": request.build_absolute_uri(spec.image.url) if spec.image else None}
             for spec in product.specification_set.all()
         ],
         "similar_products": [
