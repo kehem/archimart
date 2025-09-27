@@ -40,9 +40,10 @@
                                 <th scope="row">{{forloop.counter}}</th>
                                 <td>{{s.name}}</td>
                                 <td>
+                                  <a href="{% url "admin_edit_product" s.id %}" class="btn btn-primary">Edit</a>
                                     <a href="{% url "admin_productimage" s.id %}" class="btn btn-secondary">Add Image</a>
                                     <a href="{% url "admin_specification" s.id %}" class="btn btn-secondary">Add Spec</a>
-                                    <a href="{% url "admin_delete_product" s.id %}" class="btn btn-primary">Delete</a> 
+                                    <a href="{% url "admin_delete_product" s.id %}" class="btn btn-danger">Delete</a> 
                                 
                                 </td>
                             </tr>
