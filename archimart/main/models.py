@@ -25,6 +25,7 @@ class SubSubCategory(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=50)
     price = models.FloatField(default=0)
+    discount = models.FloatField(default=0)
     currency = models.CharField(max_length=50,choices=(
         ('BDT','BDT'),
         ('USD','USD'),
