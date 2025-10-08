@@ -380,6 +380,7 @@ def single_product(request, pk):
         "id": product.id,
         "name": product.name,
         "price": product.price,
+        "discount": product.discount,
         "currency": product.currency,
         "description": product.description,
         'recomended_title': product.recomended_title,
@@ -397,6 +398,7 @@ def single_product(request, pk):
                 "id": sp.id,
                 "name": sp.name,
                 "price": sp.price,
+                "discount": sp.discount,
                 "currency": sp.currency,
                 "images": [request.build_absolute_uri(img.image.url) for img in sp.productimage_set.all()],
             }
