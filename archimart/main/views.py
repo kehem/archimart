@@ -371,6 +371,7 @@ def get_similar_products(request):
                 elif option == "low":
                     similar = product.similar_products.all().order_by("price").first()
 
+
                 if similar:
                     result.append({
                         "product_id": product.id,
