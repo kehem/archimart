@@ -368,8 +368,16 @@ def get_similar_products(request):
                 product = Product.objects.get(id=pid)
                 if option == "high":
                     similar = product.similar_products.all().order_by("-price").first()
+                    if similar and similar.price > product.price:
+                        pass
+                    else:
+                        similar = None
                 elif option == "low":
                     similar = product.similar_products.all().order_by("price").first()
+                    if similar and similar.price < product.price:
+                        pass
+                    else:
+                        similar = None
 
 
                 if similar:
