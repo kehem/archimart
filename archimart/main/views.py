@@ -356,16 +356,43 @@ def json_file(request):
 
 
 def get_similar_products(request):
-    sub_id = request.GET.get("subsubcategory_id")
-    current_id = request.GET.get("current_id")
-    products = Product.objects.none()
-
+    sub_id = request.GET.get("product_id")
+    option = request.GET.get("option")
+    print (sub_id, option)
     if sub_id:
-        products = Product.objects.filter(subsubcategory_id=sub_id)
-        if current_id:
-            products = products.exclude(pk=current_id)
+        sub_id = sub_id.split(",")
+        # For each product id, get its most expensive similar product
+        result = []
+        for pid in sub_id:
+            try:
+                product = Product.objects.get(id=pid)
+                if option == "high":
+                    similar = product.similar_products.all().order_by("-price").first()
+                elif option == "low":
+                    similar = product.similar_products.all().order_by("price").first()
 
-    data = [{"id": p.pk, "name": p.name} for p in products]
+                if similar:
+                    result.append({
+                        "product_id": product.id,
+                        "product_name": product.name,
+                        "alternate": {
+                            "id": similar.id,
+                            "name": similar.name,
+                            "price": similar.price,
+                            "images": [request.build_absolute_uri(img.image.url) for img in similar.productimage_set.all()],
+                        }
+                    })
+                else:
+                    result.append({
+                        "product_id": product.id,
+                        "product_name": product.name,
+                        "alternate": None
+                    })
+            except Product.DoesNotExist:
+                continue
+        data = result
+    else:
+        data = []
     return JsonResponse(data, safe=False)
 
 def single_product(request, pk):
