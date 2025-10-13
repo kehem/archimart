@@ -339,7 +339,7 @@ def get_paginated_products(request,page_number, per_page, category=None, sub_cat
         "current_page": page_obj.number,
         "has_next": page_obj.has_next(),
         "has_previous": page_obj.has_previous(),
-        "results": results,
+        "products": results,
     }
 
 def json_file(request):
