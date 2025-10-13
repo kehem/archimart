@@ -380,7 +380,7 @@ def get_similar_products(request):
                             "id": similar.id,
                             "name": similar.name,
                             "price": similar.price,
-                            "images": [request.build_absolute_uri(img.image.url) for img in similar.productimage_set.all()],
+                            "discount": similar.discount,
                         }
                     })
                 else:
