@@ -379,7 +379,6 @@ def get_similar_products(request):
                     else:
                         similar = None
 
-
                 if similar:
                     result.append({
                         "product_id": product.id,
