@@ -383,6 +383,8 @@ def get_similar_products(request):
                     result.append({
                         "product_id": product.id,
                         "product_name": product.name,
+                        "price": product.price,
+                        "discount": product.discount,
                         "alternate": {
                             "id": similar.id,
                             "name": similar.name,
