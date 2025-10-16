@@ -62,3 +62,16 @@ class Specification(models.Model):
         return f"{self.key} --> {self.value} --> {self.product.name}"
     
 
+class Product_Color(models.Model):
+    Product = models.ForeignKey(Product,on_delete=models.CASCADE)
+    color = models.CharField(max_length=50)
+    size = models.CharField(max_length=50)
+    thickness = models.CharField(max_length=50)
+    stock = models.IntegerField(default=0)
+    image1 = ResizedImageField(size=[700,700],quality=85,upload_to="Product",verbose_name="Product Image")
+    image2 = ResizedImageField(size=[700,700],quality=85,upload_to="Product",verbose_name="Product Image",null=True,blank=True)
+    image3 = ResizedImageField(size=[700,700],quality=85,upload_to="Product",verbose_name="Product Image",null=True,blank=True)
+
+    def __str__(self):
+        return f"{self.Product.name} --> {self.color}"
+

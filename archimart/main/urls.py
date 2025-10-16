@@ -30,7 +30,9 @@ urlpatterns = [
     path('admin_specification/<product>',views.admin_specification,name="admin_specification"),
     path('admin_edit_specification/<product>/<pk>',views.admin_edit_specification,name="admin_edit_specification"),
     path('admin_delete_specification/<product>/<pk>',views.admin_delete_specification,name="admin_delete_specification"),
-    
+    path('admin_product_color/<product>',views.productcolor,name="admin_product_color"),
+    path('admin_product_color_edit/<product>/<pk>',views.productcolor_edit,name="product_color_edit"),
+    path('admin_product_color_delete/<product>/<pk>',views.productcolor_delete,name="product_color_delete"),
 
     path('api/properties',views.search_data,name="search"),
     path('api/single_product/<pk>',views.single_product,name="single_product"),

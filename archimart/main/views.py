@@ -792,3 +792,45 @@ def admin_delete_specification(request, product, pk):
     data = Specification.objects.get(id=pk)
     data.delete()
     return redirect('admin_specification', product=product)
+
+
+@login_required
+def productcolor(request,product):
+    pro = Product.objects.get(id=product)
+    data = Product_Color.objects.filter(product=pro.id)
+    form = ProductColorForm()
+    if request.method == 'POST':
+        form = ProductColorForm(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_product_color', product=product)
+
+    context = {
+        'data':data,
+        'form':form
+    }
+    return TemplateResponse(request, 'dashboard/color.html',context)
+
+@login_required
+def productcolor_edit(request,product,pk):
+    pro = Product.objects.get(id=product)
+    data= Product_Color.objects.filter(product=pro.id)
+    single_color = Product_Color.objects.get(id=pk)
+    form = ProductColorForm(instance = single_color)
+    if request.method == 'POST':
+        form = ProductColorForm( request.POST or None, request.FILES or None,instance=single_color)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_product_color',product=product)
+
+    context = {
+        'data':data,
+        'form':form,
+    }
+    return TemplateResponse(request, 'dashboard/color.html',context)
+
+@login_required()
+def productcolor_delete(request,product,pk):
+    data = Product_Color.objects.get(id=pk)
+    data.delete()
+    return redirect('admin_product_color',product=product)

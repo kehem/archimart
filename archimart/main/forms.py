@@ -51,3 +51,8 @@ class SpecificationForm(forms.ModelForm):
     class Meta:
         model = Specification
         fields = '__all__'
+
+class ProductColorForm(forms.ModelForm):
+    class Meta:
+        model = Product_Color
+        fields = '__all__'
