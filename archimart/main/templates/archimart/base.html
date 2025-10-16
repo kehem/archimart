@@ -16,10 +16,12 @@
   <script src="{% static 'archimart/js/Product.js' %}" defer></script>
   
   {% elif 'cart' in request.path %}
+  <link rel="stylesheet" href="{% static 'archimart/css/style.css' %}" />
   <link rel="stylesheet" href="{% static 'archimart/css/cart.css' %}" />
   <script src="{% static 'archimart/js/cart.js' %}" defer></script>
   
   {% elif 'compare' in request.path %}
+  <link rel="stylesheet" href="{% static 'archimart/css/style.css' %}" />
   <link rel="stylesheet" href="{% static 'archimart/css/compare.css' %}" />
   <script src="{% static 'archimart/js/compare.js' %}" defer></script>
   {% else %}
