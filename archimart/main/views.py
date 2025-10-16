@@ -6,6 +6,8 @@ from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Prefetch
+import logging
+logger = logging.getLogger(__name__)  # Add at top of file
 # Create your views here.
 
 def home(request):
@@ -474,7 +476,7 @@ def alternative_products(request):
             alt = product.similar_products.filter(price__gt=product.price).order_by("-price").first()
         else:
             return JsonResponse({"error": "Invalid option parameter. Use 'high' or 'low'."}, status=400)
-        print (alt)
+        logger.info(f"Found alternative for product {product.id}: {alt.id if alt else 'None'}")
         if alt:
             alternatives.append({
                 "original": {
