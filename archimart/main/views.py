@@ -20,6 +20,9 @@ def construction(request):
 def cart(request):
     return TemplateResponse(request, 'archimart/cart.html')
 
+def compare(request):
+    return TemplateResponse(request, 'archimart/compare.html')
+
 def search_data(request):
     json = {
 
