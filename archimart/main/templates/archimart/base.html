@@ -25,6 +25,9 @@
   <link rel="stylesheet" href="{% static 'archimart/css/style.css' %}" />
   <link rel="stylesheet" href="{% static 'archimart/css/compare.css' %}" />
   <script src="{% static 'archimart/js/compare.js' %}" defer></script>
+  {% elif 'detail' in request.path %}
+  <link rel="stylesheet" href="{% static 'archimart/css/detail.css' %}" />
+  <script src="{% static 'archimart/js/detail.js' %}" defer></script>
   {% else %}
   <link rel="stylesheet" href="{% static 'archimart/css/style.css' %}" />
   {% endif %}
