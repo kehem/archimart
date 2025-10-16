@@ -448,6 +448,39 @@ def single_product(request, pk):
     return JsonResponse(data, safe=False)
 
 
+def alternative_products(request):
+    product_list = request.GET.get("product_list")
+    option = request.GET.get("option", "low")
+    if not product_list:
+        return JsonResponse({"error": "Product List required"}, status=400)
+    product_ids = product_list.split(",")
+    products = Product.objects.filter(id__in=product_ids).prefetch_related("productimage_set")
+    alternatives = []
+    for product in products:
+        if option == "low":
+            alt = product.similar_products.filter(price__lt=product.price).order_by("price").first()
+        else:
+            alt = product.similar_products.filter(price__gt=product.price).order_by("-price").first()
+        if alt:
+            alternatives.append({
+                "original": {
+                    "id": product.id,
+                    "name": product.name,
+                    "price": product.price,
+                    "discount": product.discount,
+                    "currency": product.currency,
+                    "images": [request.build_absolute_uri(img.image.url) for img in product.productimage_set.all()],
+                },
+                "alternative": {
+                    "id": alt.id,
+                    "name": alt.name,
+                    "price": alt.price,
+                    "discount": alt.discount,
+                    "currency": alt.currency,
+                    "images": [request.build_absolute_uri(img.image.url) for img in alt.productimage_set.all()],
+                }
+            })
+    return JsonResponse(alternatives, safe=False)
 #######################################
 # Dashboard Start After this code 
 ############################################
