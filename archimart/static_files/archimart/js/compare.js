@@ -468,7 +468,7 @@ function createCombinedSelection() {
   showNotification(`Combined selection created! Total: ${totalAmount}/- (${totalItems} items)`);
   
   setTimeout(() => {
-    window.location.href = 'cart.html?combined=true';
+    window.location.href = 'https://archimartbd.com/cart?combined=true';
   }, 1500);
 }
 
