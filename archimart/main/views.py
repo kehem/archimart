@@ -466,7 +466,7 @@ def alternative_products(request):
         .prefetch_related(Prefetch("productimage_set"), Prefetch("similar_products__productimage_set"))
     )
 
-    alternatives = ['aaa']
+    alternatives = []
     for product in products:
         if option == "low":
             alt = product.similar_products.filter(price__lt=product.price).order_by("price").first()
@@ -474,7 +474,7 @@ def alternative_products(request):
             alt = product.similar_products.filter(price__gt=product.price).order_by("-price").first()
         else:
             return JsonResponse({"error": "Invalid option parameter. Use 'high' or 'low'."}, status=400)
-
+        print (alt)
         if alt:
             alternatives.append({
                 "original": {
