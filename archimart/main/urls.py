@@ -8,7 +8,7 @@ from . import views
 urlpatterns = [
     path('',views.home,name="home"),
     path('construction',views.construction,name="construction"),
-    path('products.json',views.json_file,name="product_json"),
+    path('product.json',views.json_file,name="product_json"),
 
     # dashboard 
     path('dashboard',views.dashboard,name="dashboard"),
