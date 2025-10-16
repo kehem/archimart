@@ -384,8 +384,8 @@ function goToCompare(option) {
   } catch (e) {
     console.error("Error saving cart state for compare:", e);
   }
-  // add query param to Compare.html
-  window.location.href = `Compare.html?option=${encodeURIComponent(option)}`;
+  // add query param to https://archimartbd.com/compare
+  window.location.href = `https://archimartbd.com/compare?option=${encodeURIComponent(option)}`;
 }
 
 function continueShopping() {
