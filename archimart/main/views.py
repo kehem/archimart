@@ -5,6 +5,7 @@ from django.shortcuts import redirect
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from django.db.models import Prefetch
 # Create your views here.
 
 def home(request):
@@ -450,38 +451,51 @@ def single_product(request, pk):
 
 def alternative_products(request):
     product_list = request.GET.get("product_list")
-    option = request.GET.get("option", "low")
+    option = request.GET.get("option", "low").lower()  # ensure lowercase input
+
     if not product_list:
-        return JsonResponse({"error": "Product List required"}, status=400)
-    product_ids = product_list.split(",")
-    products = Product.objects.filter(id__in=product_ids).prefetch_related("productimage_set")
-    return JsonResponse(products, safe=False)
-    # alternatives = []
-    # for product in products:
-    #     if option == "low":
-    #         alt = product.similar_products.filter(price__lt=product.price).order_by("price").first()
-    #     else:
-    #         alt = product.similar_products.filter(price__gt=product.price).order_by("-price").first()
-    #     if alt:
-    #         alternatives.append({
-    #             "original": {
-    #                 "id": product.id,
-    #                 "name": product.name,
-    #                 "price": product.price,
-    #                 "discount": product.discount,
-    #                 "currency": product.currency,
-    #                 "images": [request.build_absolute_uri(img.image.url) for img in product.productimage_set.all()],
-    #             },
-    #             "alternative": {
-    #                 "id": alt.id,
-    #                 "name": alt.name,
-    #                 "price": alt.price,
-    #                 "discount": alt.discount,
-    #                 "currency": alt.currency,
-    #                 "images": [request.build_absolute_uri(img.image.url) for img in alt.productimage_set.all()],
-    #             }
-    #         })
-    # return JsonResponse(alternatives, safe=False)
+        return JsonResponse({"error": "Product list required"}, status=400)
+
+    product_ids = [pid.strip() for pid in product_list.split(",") if pid.strip().isdigit()]
+
+    if not product_ids:
+        return JsonResponse({"error": "Invalid product IDs"}, status=400)
+
+    products = (
+        Product.objects.filter(id__in=product_ids)
+        .prefetch_related(Prefetch("productimage_set"), Prefetch("similar_products__productimage_set"))
+    )
+
+    alternatives = []
+    for product in products:
+        if option == "low":
+            alt = product.similar_products.filter(price__lt=product.price).order_by("price").first()
+        elif option == "high":
+            alt = product.similar_products.filter(price__gt=product.price).order_by("-price").first()
+        else:
+            return JsonResponse({"error": "Invalid option parameter. Use 'high' or 'low'."}, status=400)
+
+        if alt:
+            alternatives.append({
+                "original": {
+                    "id": product.id,
+                    "name": product.name,
+                    "price": float(product.price),
+                    "discount": product.discount,
+                    "currency": product.currency,
+                    "images": [request.build_absolute_uri(img.image.url) for img in product.productimage_set.all()],
+                },
+                "alternative": {
+                    "id": alt.id,
+                    "name": alt.name,
+                    "price": float(alt.price),
+                    "discount": alt.discount,
+                    "currency": alt.currency,
+                    "images": [request.build_absolute_uri(img.image.url) for img in alt.productimage_set.all()],
+                },
+            })
+
+    return JsonResponse(alternatives, safe=False)
 #######################################
 # Dashboard Start After this code 
 ############################################
