@@ -466,7 +466,7 @@ def alternative_products(request):
         .prefetch_related(Prefetch("productimage_set"), Prefetch("similar_products__productimage_set"))
     )
 
-    alternatives = []
+    alternatives = ['aaa']
     for product in products:
         if option == "low":
             alt = product.similar_products.filter(price__lt=product.price).order_by("price").first()
