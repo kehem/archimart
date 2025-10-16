@@ -8,6 +8,8 @@ from . import views
 urlpatterns = [
     path('',views.home,name="home"),
     path('construction',views.construction,name="construction"),
+    path('cart',views.cart,name="cart"),
+    path('compare',views.compare,name="compare"),
     path('product.json',views.json_file,name="product_json"),
 
     # dashboard 

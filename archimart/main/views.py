@@ -17,6 +17,8 @@ def home(request):
 def construction(request):
     return TemplateResponse(request, 'archimart/construction.html')
 
+def cart(request):
+    return TemplateResponse(request, 'archimart/cart.html')
 
 def search_data(request):
     json = {

@@ -1,0 +1,142 @@
+{% extends "archimart/base.html" %}
+
+
+{% block content %}
+
+
+ <a href="cart.html" class="back-button">← Back to Cart</a>
+    
+    <div class="container">
+        <div class="header">
+            Alternate option with higher price
+        </div>
+        
+        <div class="comparison-container">
+            <!-- Your Products Section -->
+            <div class="product-section">
+                <div class="section-title">Your Products</div>
+                
+                <table class="product-table">
+                    <thead class="table-header">
+                        <tr>
+                            <th>Items</th>
+                            <th>Brand</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Select</th>
+                        </tr>
+                    </thead>
+                    <tbody id="your-products-table">
+                        <tr class="product-row" data-price="550">
+                            <td>1. Item 1</td>
+                            <td>Wow</td>
+                            <td>550/-</td>
+                            <td><input type="checkbox" class="select-checkbox your-products" data-price="550"></td>
+                        </tr>
+                        <tr class="product-row" data-price="550">
+                            <td>2. Item 1</td>
+                            <td>Wow</td>
+                            <td>550/-</td>
+                            <td><input type="checkbox" class="select-checkbox your-products" data-price="550"></td>
+                        </tr>
+                        <tr class="product-row" data-price="550">
+                            <td>3. Item 1</td>
+                            <td>Wow</td>
+                            <td>550/-</td>
+                            <td><input type="checkbox" class="select-checkbox your-products" data-price="550"></td>
+                        </tr>
+                        <tr class="product-row" data-price="550">
+                            <td>4. Item 1</td>
+                            <td>Wow</td>
+                            <td>550/-</td>
+                            <td><input type="checkbox" class="select-checkbox your-products" data-price="550"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="total-section">
+                    <div class="total-row">
+                        <span>Total Amount</span>
+                        <span id="your-total">0/-</span>
+                    </div>
+                    <button class="choice-button" id="select-your-choice" disabled>Select Your Choice</button>
+                </div>
+            </div>
+
+            <!-- Alternate Products Section -->
+            <div class="product-section">
+                <div class="section-title">Alternate Products</div>
+                
+                <table class="product-table">
+                    <thead class="table-header">
+                        <tr>
+                            <th>Items</th>
+                            <th>Brand</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Select</th>
+                        </tr>
+                    </thead>
+                    <tbody id="alternate-products-table">
+                        <tr class="product-row" data-price="750">
+                            <td>1. Premium Item</td>
+                            <td>Wow</td>
+                            <td>750/-</td>
+                            <td><input type="checkbox" class="select-checkbox alternate-products" data-price="750"></td>
+                        </tr>
+                        <tr class="product-row" data-price="750">
+                            <td>2. Premium Item</td>
+                            <td>Wow</td>
+                            <td>750/-</td>
+                            <td><input type="checkbox" class="select-checkbox alternate-products" data-price="750"></td>
+                        </tr>
+                        <tr class="product-row" data-price="750">
+                            <td>3. Premium Item</td>
+                            <td>Wow</td>
+                            <td>750/-</td>
+                            <td><input type="checkbox" class="select-checkbox alternate-products" data-price="750"></td>
+                        </tr>
+                        <tr class="product-row" data-price="750">
+                            <td>4. Premium Item</td>
+                            <td>Wow</td>
+                            <td>750/-</td>
+                            <td><input type="checkbox" class="select-checkbox alternate-products" data-price="750"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="total-section">
+                    <div class="total-row">
+                        <span>Total Amount</span>
+                        <span id="alternate-total">0/-</span>
+                    </div>
+                    <button class="choice-button" id="archimart-choice" disabled>Archimart Choice</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="combined-section">
+            <div class="section-title">Combined Selection</div>
+            <p style="text-align: center; margin-bottom: 20px; color: #666;">
+                Select items from either section above to create a combined selection.
+            </p>
+            <div class="total-row">
+                <span>Combined Total Amount</span>
+                <span id="combined-total">0/-</span>
+            </div>
+            <button class="combined-button" id="combined-selection" disabled>Create Combined Selection</button>
+        </div>
+    </div>
+
+    <div class="instructions">
+        <strong>Instructions:</strong>
+        <ul>
+            <li>Select items from "Your Products" (left side) or "Alternate Products" (right side)</li>
+            <li>Click "Select Your Choice" or "Archimart Choice" to confirm your selection from each side</li>
+            <li>Once you've made selections from both sides, you can create a "Combined Selection"</li>
+            <li>The combined selection will include your chosen items from both sections</li>
+        </ul>
+    </div>
+
+
+{% endblock content %}
