@@ -300,7 +300,7 @@ def search_data(request):
 
 def get_paginated_products(request,page_number, per_page, category=None, sub_category=None, sub_sub_category=None):
     products_qs = Product.objects.prefetch_related(
-        "productimage_set", "specification_set"
+        "productimage_set", "specification_set", "product_color_set"
     ).order_by("id")
     print (category, sub_category, sub_sub_category)
     # Apply filters if provided
@@ -330,10 +330,14 @@ def get_paginated_products(request,page_number, per_page, category=None, sub_cat
             "subsubcategory": product.subsubcategory.name,
 
             "images": [request.build_absolute_uri(img.image.url) for img in product.productimage_set.all()],
+            
+
             "specifications": [
             {"key": spec.key, "value": spec.value, "price": spec.price}
             for spec in product.specification_set.all()
-            ]
+            ],
+            
+            
         })
 
     return {
@@ -435,6 +439,25 @@ def single_product(request, pk):
             {"key": spec.key, "value": spec.value, "price": spec.price, "image": request.build_absolute_uri(spec.image.url) if spec.image else None}
             for spec in product.specification_set.all()
         ],
+        "color_images": [
+                {
+                    "color": p_color.color,
+                    "images": [img for img in [p_color.image1, p_color.image2, p_color.image3] if img]
+                }
+                for p_color in product.product_color_set.all()
+            ],
+        "stock_combination":[
+                {
+                    "color": p_color.color,
+                    "size": p_color.size,
+                    "thickness":p_color.thickness,
+                    "stock": p_color.stock,
+
+                }
+                for p_color in product.product_color_set.all()
+            ],
+
+        
         "similar_products": [
             {
                 "id": sp.id,
@@ -442,7 +465,7 @@ def single_product(request, pk):
                 "price": sp.price,
                 "discount": sp.discount,
                 "currency": sp.currency,
-                "images": [request.build_absolute_uri(img.image.url) for img in sp.productimage_set.all()],
+                "image": request.build_absolute_uri(sp.productimage_set.first().image.url) if sp.productimage_set.exists() else None,
             }
             for sp in product.similar_products.all()
         ],
