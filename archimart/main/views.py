@@ -494,8 +494,10 @@ def alternative_products(request):
     alternatives = []
     for product in products:
         if option == "low":
+            m = "This is Basic Product"
             alt = product.similar_products.filter(price__lt=product.price).order_by("price").first()
         elif option == "high":
+            m= "This is Premium Product"
             alt = product.similar_products.filter(price__gt=product.price).order_by("-price").first()
         else:
             return JsonResponse({"error": "Invalid option parameter. Use 'high' or 'low'."}, status=400)
@@ -518,6 +520,19 @@ def alternative_products(request):
                     "currency": alt.currency,
                     "images": [request.build_absolute_uri(img.image.url) for img in alt.productimage_set.all()],
                 },
+            })
+        else:
+            
+            alternatives.append({
+                "original": {
+                    "id": product.id,
+                    "name": product.name,
+                    "price": float(product.price),
+                    "discount": product.discount,
+                    "currency": product.currency,
+                    "images": [request.build_absolute_uri(img.image.url) for img in product.productimage_set.all()],
+                },
+                "alternative": m,
             })
 
     return JsonResponse(alternatives, safe=False)
