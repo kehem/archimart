@@ -41,8 +41,9 @@
                                 <td>{{s.name}}</td>
                                 <td>
                                   <a href="{% url "admin_edit_product" s.id %}" class="btn btn-primary">Edit</a>
-                                    <a href="{% url "admin_productimage" s.id %}" class="btn btn-secondary">Add Image</a>
-                                    <a href="{% url "admin_specification" s.id %}" class="btn btn-secondary">Add Spec</a>
+                                    <a href="{% url "admin_productimage" s.id %}" class="btn btn-secondary">Image</a>
+                                    <a href="{% url "admin_specification" s.id %}" class="btn btn-secondary">Spec</a>
+                                    <a href="{% url "admin_product_color" s.id %}" class="btn btn-secondary">Color</a>
                                     <a href="{% url "admin_delete_product" s.id %}" class="btn btn-danger">Delete</a> 
                                 
                                 </td>
