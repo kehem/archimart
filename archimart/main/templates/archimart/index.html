@@ -3,30 +3,23 @@
 {% block content %}
   <!-- Main Section -->
   <section class="main-content">
-    <div class="portrait-image">
-      <img src="{% static 'archimart/image/po.png' %}" alt="Portrait Background" class="portrait-img" />
+    <div class="hero" role="region" aria-label="Archimart BD introduction">
+      <h1>Archimart BD</h1>
+      <p class="lead">Your one-stop marketplace for construction materials, home appliances and furniture across Bangladesh. Quality products, trusted vendors and fast delivery.</p>
     </div>
-    
-    <div class="card-container">
-      <div class="card">
-        <img src="{% static 'archimart/image/Screenshot__249_-removebg-preview.png' %}" alt="Product 1" class="card-img" />
-        <h3>Construction Materials</h3>
-        <p>High-quality bricks, cement, and steel for your building needs.</p>
-        <a href="{% url 'construction' %}?category=Construction" class="card-button">Shop Now</a>
-      </div>
-      <div class="card">
-        <img src="{% static 'archimart/image/Screenshot__249_-removebg-preview.png' %}" alt="Product 2" class="card-img" />
-        <h3>Home Appliances</h3>
-        <p>Modern appliances to enhance your home's functionality.</p>
-        <a href="HomeAppliances.html" class="card-button">Shop Now</a>
-      </div>
-      <div class="card">
-        <img src="{% static 'archimart/image/Screenshot__249_-removebg-preview.png' %}" alt="Product 3" class="card-img" />
-        <h3>Furniture</h3>
-        <p>Stylish and durable furniture for every room.</p>
-        <a href="Furnitures.html" class="card-button">Shop Now</a>
+    <div class="logo-slider" aria-hidden="false" aria-label="Partner and brand logos">
+      <div class="logo-track" aria-hidden="true">
+        <img src="archimart product/1.png" alt="Archimart logo" />
+        <img src="archimart product/2.png" alt="Archimart logo" />
+        <img src="archimart product/3.png" alt="Archimart logo" />
+        <img src="archimart product/4.png" alt="Archimart logo" />
+        <img src="archimart product/5.png" alt="Archimart logo" />
+        <img src="archimart product/6.png" alt="Archimart logo" />
       </div>
     </div>
+    <a href="{% url 'construction' %}" class="shop-now-btn" aria-label="Shop Now">
+      Shop Now <i class="fas fa-chevron-down"></i>
+    </a>
   </section>
 
   <!-- Menu Section -->
@@ -120,4 +113,10 @@
       <img src="{% static 'archimart/image/Furniture.jpg' %}" alt="Finishing materials" data-image="finishing" />
     </div>
   </section>
+  
+  <!-- Hover preview container for subcategory images -->
+  <div id="hover-preview" class="hover-preview" aria-hidden="true">
+    <img src="" alt="preview" />
+  </div>
+
 {% endblock content %}
