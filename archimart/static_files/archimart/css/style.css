@@ -431,7 +431,7 @@ body {
 .main-content {
   position: relative;
   background-image: linear-gradient(rgba(3, 3, 3, 0.5), rgba(3, 3, 3, 0.5)), 
-                    url('Image/spacejoy-YI2YkyaREHk-unsplash.jpg');
+                    url('https://github.com/puffshuvo/website/blob/main/Image/spacejoy-YI2YkyaREHk-unsplash.jpg?raw=true');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
