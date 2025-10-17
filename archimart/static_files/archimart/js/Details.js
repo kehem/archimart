@@ -79,7 +79,7 @@ function loadProductData() {
                     } else {
                         similarProducts.forEach(p => {
                             const item = document.createElement('a');
-                            item.href = `details.html?id=${p.id}`;
+                            item.href = `https://archimartbd.com/detail?id=${p.id}`;
                             item.className = 'similar-item';
                             item.innerHTML = `
                                 <div class="similar-image">

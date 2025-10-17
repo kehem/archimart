@@ -76,7 +76,7 @@ function updateBreadcrumb() {
 
 function loadProductData() {
     const urlParams = new URLSearchParams(window.location.search);
-    let productId = urlParams.get('id') || '1'; // Fallback to id=1
+    let productId = urlParams.get('id') || '1'; // fallback to id=1
     console.log('Product ID from URL:', productId);
 
     if (!productId) {
@@ -88,69 +88,48 @@ function loadProductData() {
     }
 
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'Details.json', true);
+    // ✅ dynamic endpoint with productId
+    xhr.open('GET', `https://archimartbd.com/api/single_product/${productId}`, true);
+
     xhr.onreadystatechange = () => {
-        console.log('XHR readyState:', xhr.readyState, 'status:', xhr.status);
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 try {
                     const data = JSON.parse(xhr.responseText);
                     console.log('Parsed JSON:', data);
-                    productData = data.id == productId ? data : null;
 
-                    if (!productData) {
-                        console.error(`Product with ID ${productId} not found in Details.json`);
-                        document.getElementById('productTitle').textContent = 'Product Not Found';
-                        document.getElementById('productDescription').textContent = 'This product is not available.';
-                        alert('Error: Product not found.');
-                        return;
-                    }
+                    // directly use data since this endpoint already returns a single product
+                    const productData = data;
 
-                    // Populate product details
+                    // === Populate Product Data ===
                     document.getElementById('productTitle').textContent = productData.name;
                     document.getElementById('productPrice').textContent = `৳${productData.price.toFixed(2)} ${productData.currency || 'BDT'}`;
                     document.getElementById('productDescription').textContent = productData.description || 'No description available.';
-                    document.getElementById('recommendationText').textContent = productData.recomended_text || 'This product is recommended for its quality and suitability for construction projects.';
+                    document.getElementById('recommendationText').textContent = productData.recomended_text || 'This product is recommended for its quality.';
 
-                    // Populate specifications
+                    // === Specifications ===
                     const specsList = document.getElementById('specifications');
-                    if (!specsList) {
-                        console.error('Element with ID "specifications" not found in the DOM');
-                        alert('Error: Specifications list element not found in the page.');
-                        return;
-                    }
                     specsList.innerHTML = '';
-                    let hasOtherSpecs = false;
-                    console.log('Specifications data:', productData.specifications);
-                    if (productData.specifications && productData.specifications.length > 0) {
+                    if (productData.specifications?.length) {
                         productData.specifications.forEach(spec => {
-                            if (spec.key !== 'Color' && spec.key !== 'Size' && spec.key !== 'Thickness') {
-                                console.log('Adding spec:', spec.key, spec.value);
+                            if (!['Color', 'Size', 'Thickness'].includes(spec.key)) {
                                 const li = document.createElement('li');
                                 li.textContent = `${spec.key}: ${spec.value}`;
                                 specsList.appendChild(li);
-                                hasOtherSpecs = true;
                             }
                         });
-                    }
-                    if (!hasOtherSpecs) {
-                        console.log('No non-filter specifications found');
+                    } else {
                         specsList.innerHTML = '<li>No additional specifications available</li>';
                     }
 
-                    // Populate similar products
+                    // === Similar Products ===
                     const similarGrid = document.querySelector('.similar-grid');
-                    if (!similarGrid) {
-                        console.error('Similar products grid not found in the DOM');
-                        return;
-                    }
                     similarGrid.innerHTML = '';
-                    console.log('Similar products data:', productData.similar_products);
-                    if (productData.similar_products && productData.similar_products.length > 0) {
+                    if (productData.similar_products?.length) {
                         productData.similar_products.forEach(product => {
                             const similarItem = document.createElement('a');
                             similarItem.className = 'similar-item';
-                            similarItem.href = `Details.html?id=${product.id}`;
+                            similarItem.href = `https://archimartbd.com/detail?id=${product.id}`;
                             const priceContent = product.discount > 0 
                                 ? `<div class="price strikethrough">৳${product.price.toFixed(2)}</div><div class="discount-price">৳${(product.price - product.discount).toFixed(2)} ${productData.currency || 'BDT'}</div>`
                                 : `<div class="price">৳${product.price.toFixed(2)} ${productData.currency || 'BDT'}</div>`;
@@ -168,38 +147,32 @@ function loadProductData() {
                         similarGrid.innerHTML = '<p>No similar products available.</p>';
                     }
 
-                    // Populate filter circles and set defaults
-                    populateFilterCircles();
+                    // === Optional helpers ===
+                    populateFilterCircles?.();
+                    updatePrice?.();
+                    updateStockStatus?.();
+                    updateImages?.();
+                    updateBreadcrumb?.();
 
-                    // Update price, stock, and images based on default selections
-                    updatePrice();
-                    updateStockStatus();
-                    updateImages();
-
-                    // Update breadcrumb
-                    updateBreadcrumb();
                 } catch (e) {
-                    console.error('Error parsing Details.json:', e);
-                    console.log('Raw response:', xhr.responseText);
-                    document.getElementById('productTitle').textContent = 'Error Loading Product';
+                    console.error('Error parsing product data:', e);
                     alert('Error loading product data. Please try again.');
                 }
             } else {
-                console.error('Error fetching Details.json:', xhr.statusText);
-                console.log('Raw response:', xhr.responseText);
-                document.getElementById('productTitle').textContent = 'Error Loading Product';
+                console.error('Error fetching product data:', xhr.statusText);
                 alert('Error loading product data. Please try again.');
             }
         }
     };
+
     xhr.onerror = () => {
-        console.error('Network error while fetching Details.json');
-        console.log('Raw response (if any):', xhr.responseText);
-        document.getElementById('productTitle').textContent = 'Error Loading Product';
-        alert('Error loading product data. Please try again.');
+        console.error('Network error while fetching product data');
+        alert('Network error while loading product. Please try again.');
     };
+
     xhr.send();
 }
+
 
 function populateFilterCircles() {
     const colorCircles = document.getElementById('colorCircles');
