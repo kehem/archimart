@@ -521,12 +521,12 @@ class ProductGallery {
 
             return `
                 <div class="product-card" data-id="${product.id}">
-                    <a href="details.html?id=${product.id}" class="product-image">
+                    <a href="https://archimartbd.com/detail?id=${product.id}" class="product-image">
                         <img src="${product.image}" alt="${product.name}">
                     </a>
                     <div class="product-info">
                         <h3 class="product-name">
-                            <a href="details.html?id=${product.id}">${product.name}</a>
+                            <a href="https://archimartbd.com/detail?id=${product.id}">${product.name}</a>
                         </h3>
                         <div class="product-category">${product.subcategory || product.category}</div>
                         ${specsHtml}
@@ -535,7 +535,7 @@ class ProductGallery {
                             <button class="btn btn-primary" onclick="gallery.addToCart(${product.id})">
                                 Add to Cart
                             </button>
-                            <a href="details.html?id=${product.id}" class="btn btn-secondary">
+                            <a href="https://archimartbd.com/detail?id=${product.id}" class="btn btn-secondary">
                                 View Details
                             </a>
                         </div>

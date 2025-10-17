@@ -10,6 +10,7 @@ urlpatterns = [
     path('construction',views.construction,name="construction"),
     path('cart',views.cart,name="cart"),
     path('compare',views.compare,name="compare"),
+    path('detail',views.detail,name="detail"),
     path('product.json',views.json_file,name="product_json"),
 
     # dashboard 
