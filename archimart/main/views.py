@@ -23,6 +23,9 @@ def cart(request):
 def compare(request):
     return TemplateResponse(request, 'archimart/compare.html')
 
+def detail(request):
+    return TemplateResponse(request, 'archimart/product.html')
+
 def search_data(request):
     json = {
 
