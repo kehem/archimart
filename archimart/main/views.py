@@ -363,7 +363,7 @@ def json_file(request):
     sub_sub_category = request.GET.get("subsubcategory")
     page_number = int(request.GET.get("page", 1))
     per_page = int(request.GET.get("per_page", 10))
-    
+    logger.info(f"Fetching products - Category: {category}, Subcategory: {sub_category}, Subsubcategory: {sub_sub_category}, Page: {page_number}, Per Page: {per_page}")
     data = get_paginated_products(
         request,page_number, per_page, category, sub_category, sub_sub_category
     )
