@@ -39,7 +39,7 @@ urlpatterns = [
 
     path('api/properties',views.search_data,name="search"),
     path('api/single_product/<pk>',views.single_product,name="single_product"),
-    path("ajax/similar-products/", views.get_similar_products, name="ajax_similar_products"),
+    path("api/similar-products/", views.get_similar_products, name="ajax_similar_products"),
     path('api/alternative', views.alternative_products, name='alternative_products'),
 
 ]
