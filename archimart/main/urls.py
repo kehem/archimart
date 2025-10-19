@@ -11,7 +11,7 @@ urlpatterns = [
     path('cart',views.cart,name="cart"),
     path('compare',views.compare,name="compare"),
     path('detail',views.detail,name="detail"),
-    path('product.json',views.json_file,name="product_json"),
+    
 
     # dashboard 
     path('dashboard',views.dashboard,name="dashboard"),
@@ -37,6 +37,7 @@ urlpatterns = [
     path('admin_product_color_edit/<product>/<pk>',views.productcolor_edit,name="product_color_edit"),
     path('admin_product_color_delete/<product>/<pk>',views.productcolor_delete,name="product_color_delete"),
 
+    path('api/product.json',views.json_file,name="product_json"),
     path('api/properties',views.search_data,name="search"),
     path('api/single_product/<pk>',views.single_product,name="single_product"),
     path("api/similar-products/", views.get_similar_products, name="ajax_similar_products"),
