@@ -450,7 +450,11 @@ def single_product(request, pk):
         "color_images": [
                 {
                     "color": p_color.color,
-                    "images": [img for img in [p_color.image1.url, p_color.image2.url, p_color.image3.url] if img]
+                    "images": [
+                        request.build_absolute_uri(img.url)
+                        for img in (p_color.image1, p_color.image2, p_color.image3)
+                        if img and getattr(img, "url", None)
+                    ]
                 }
                 for p_color in product.product_color_set.all()
             ],
@@ -460,12 +464,9 @@ def single_product(request, pk):
                     "size": p_color.size,
                     "thickness":p_color.thickness,
                     "stock": p_color.stock,
-
                 }
                 for p_color in product.product_color_set.all()
             ],
-
-        
         "similar_products": [
             {
                 "id": sp.id,
@@ -473,7 +474,7 @@ def single_product(request, pk):
                 "price": sp.price,
                 "discount": sp.discount,
                 "currency": sp.currency,
-                "image": request.build_absolute_uri(sp.productimage_set.first().image.url) if sp.productimage_set.exists() else None,
+                "image": request.build_absolute_uri(sp.productimage_set.first().image.url) if sp.productimage_set.exists() and sp.productimage_set.first().image else None,
             }
             for sp in product.similar_products.all()
         ],
