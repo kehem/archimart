@@ -312,10 +312,13 @@ def get_paginated_products(request,page_number, per_page, category=None, sub_cat
     ).order_by("id")
     # Apply filters if provided
     if category:
+        print (category)
         products_qs = products_qs.filter(subsubcategory__subcategory__category__name=category)
     if sub_category:
+        print (sub_category)
         products_qs = products_qs.filter(subsubcategory__subcategory__name=sub_category)
     if sub_sub_category:
+        print (sub_sub_category)
         products_qs = products_qs.filter(subsubcategory__name=sub_sub_category)
     
     paginator = Paginator(products_qs, per_page)
@@ -324,7 +327,6 @@ def get_paginated_products(request,page_number, per_page, category=None, sub_cat
     results = []
     for product in page_obj.object_list:
         results.append({
-            "data":products_qs,
             "id": product.id,
             "name": product.name,
             "price": product.price,
