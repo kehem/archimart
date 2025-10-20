@@ -450,7 +450,7 @@ def single_product(request, pk):
         "color_images": [
                 {
                     "color": p_color.color,
-                    "images": [img for img in [p_color.image1, p_color.image2, p_color.image3] if img]
+                    "images": [img for img in [p_color.image1.url, p_color.image2.url, p_color.image3.url] if img]
                 }
                 for p_color in product.product_color_set.all()
             ],
