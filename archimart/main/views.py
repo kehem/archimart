@@ -347,7 +347,6 @@ def get_paginated_products(request,page_number, per_page, category=None, sub_cat
             for spec in product.specification_set.all()
             ],
             
-            
         })
 
     return {
