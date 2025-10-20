@@ -313,13 +313,13 @@ def get_paginated_products(request,page_number, per_page, category=None, sub_cat
     # Apply filters if provided
     if category:
         logger.info("Category filter: %s", category)
-        products_qs = products_qs.filter(subsubcategory__subcategory__category__name=category)
+        products_qs = products_qs.filter(subsubcategory__subcategory__category__name__iexact=category)
     if sub_category:
         logger.info("Subcategory filter: %s", sub_category)
-        products_qs = products_qs.filter(subsubcategory__subcategory__name=sub_category)
+        products_qs = products_qs.filter(subsubcategory__subcategory__name__iexact=sub_category)
     if sub_sub_category:
         logger.info("Subsubcategory filter: %s", sub_sub_category)
-        products_qs = products_qs.filter(subsubcategory__name=sub_sub_category)
+        products_qs = products_qs.filter(subsubcategory__name__iexact=sub_sub_category)
     
     paginator = Paginator(products_qs, per_page)
     page_obj = paginator.get_page(page_number)
