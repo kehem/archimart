@@ -862,7 +862,7 @@ def productcolor(request,product):
 @login_required
 def productcolor_edit(request,product,pk):
     pro = Product.objects.get(id=product)
-    data= Product_Color.objects.filter(product=pro.id)
+    data= Product_Color.objects.filter(Product=pro.id)
     single_color = Product_Color.objects.get(id=pk)
     form = ProductColorForm(instance = single_color)
     if request.method == 'POST':
