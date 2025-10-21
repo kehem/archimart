@@ -71,7 +71,7 @@ class Product_Color(models.Model):
     color = models.CharField(max_length=50)
     stock = models.IntegerField(default=0)
     price = models.FloatField(default=0)
-    image1 = ResizedImageField(size=[700,700],quality=85,upload_to="Product",verbose_name="Product Image")
+    image1 = ResizedImageField(size=[700,700],quality=85,upload_to="Product",verbose_name="Product Image",null=True,blank=True)
     image2 = ResizedImageField(size=[700,700],quality=85,upload_to="Product",verbose_name="Product Image",null=True,blank=True)
     image3 = ResizedImageField(size=[700,700],quality=85,upload_to="Product",verbose_name="Product Image",null=True,blank=True)
 
