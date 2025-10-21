@@ -32,10 +32,14 @@ class Product(models.Model):
         ('INR','INR'),
     ),default='BDT')
     description = models.TextField()
-    recomended_title = models.CharField(max_length=100,null=True,blank=True)
-    recomended_text = models.TextField(null=True,blank=True)
+    recomended_title = models.CharField(max_length=100,null=True,blank=True,verbose_name="ArchiMart Recomendation Title")
+    recomended_text = models.TextField(null=True,blank=True,verbose_name="ArchiMart Recomendation Text")
     subsubcategory = models.ForeignKey(SubSubCategory, on_delete=models.CASCADE, related_name='products')
+    image1 = ResizedImageField(size=[700,700],quality=85,upload_to="Product",verbose_name="Product Image")
+    image2 = ResizedImageField(size=[700,700],quality=85,upload_to="Product",verbose_name="Product Image",null=True,blank=True)
+    image3 = ResizedImageField(size=[700,700],quality=85,upload_to="Product",verbose_name="Product Image",null=True,blank=True)
     # Self-referential ManyToMany
+    Specification = models.TextField(null=True,blank=True)
     similar_products = models.ManyToManyField(
         "self",
         blank=True,
@@ -65,9 +69,8 @@ class Specification(models.Model):
 class Product_Color(models.Model):
     Product = models.ForeignKey(Product,on_delete=models.CASCADE)
     color = models.CharField(max_length=50)
-    size = models.CharField(max_length=50)
-    thickness = models.CharField(max_length=50)
     stock = models.IntegerField(default=0)
+    price = models.FloatField(default=0)
     image1 = ResizedImageField(size=[700,700],quality=85,upload_to="Product",verbose_name="Product Image")
     image2 = ResizedImageField(size=[700,700],quality=85,upload_to="Product",verbose_name="Product Image",null=True,blank=True)
     image3 = ResizedImageField(size=[700,700],quality=85,upload_to="Product",verbose_name="Product Image",null=True,blank=True)
@@ -75,3 +78,24 @@ class Product_Color(models.Model):
     def __str__(self):
         return f"{self.Product.name} --> {self.color}"
 
+class Product_Size(models.Model):
+    Product = models.ForeignKey(Product,on_delete=models.CASCADE)
+    size = models.CharField(max_length=50)
+    stock = models.IntegerField(default=0)
+    price = models.FloatField(default=0)
+    image1 = ResizedImageField(size=[700,700],quality=85,upload_to="Product",verbose_name="Product Image")
+    image2 = ResizedImageField(size=[700,700],quality=85,upload_to="Product",verbose_name="Product Image",null=True,blank=True)
+    image3 = ResizedImageField(size=[700,700],quality=85,upload_to="Product",verbose_name="Product Image",null=True,blank=True) 
+    def __str__(self):
+        return f"{self.Product.name} --> {self.size}"
+    
+class Product_Thickness(models.Model):
+    Product = models.ForeignKey(Product,on_delete=models.CASCADE)
+    thickness = models.CharField(max_length=50)
+    stock = models.IntegerField(default=0)
+    price = models.FloatField(default=0)
+    image1 = ResizedImageField(size=[700,700],quality=85,upload_to="Product",verbose_name="Product Image")
+    image2 = ResizedImageField(size=[700,700],quality=85,upload_to="Product",verbose_name="Product Image",null=True,blank=True)
+    image3 = ResizedImageField(size=[700,700],quality=85,upload_to="Product",verbose_name="Product Image",null=True,blank=True) 
+    def __str__(self):
+        return f"{self.Product.name} --> {self.thickness}"

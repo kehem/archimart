@@ -443,7 +443,7 @@ def single_product(request, pk):
         'category': product.subsubcategory.subcategory.category.name,
         "subcategory": product.subsubcategory.subcategory.name,
         "subsubcategory": product.subsubcategory.name,
-        # "images": [request.build_absolute_uri(img.image.url) for img in product.productimage_set.all()],
+        "images": [request.build_absolute_uri(img.image.url) for img in product.productimage_set.all()],
        
         "color_images": [
                 {
@@ -883,3 +883,82 @@ def productcolor_delete(request,product,pk):
     data = Product_Color.objects.get(id=pk)
     data.delete()
     return redirect('admin_product_color',product=product)
+
+@login_required
+def productsize(request,product):
+    data = Product_Size.objects.filter(Product=product)
+    form = ProductSizeForm()
+    if request.method == 'POST':
+        form = ProductSizeForm(request.POST or None)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_product_size',product=product)
+
+    context = {
+        'data':data,
+        'form':form
+    }
+    return TemplateResponse(request, 'dashboard/size.html',context)
+
+@login_required
+def productsize_edit(request,product,pk):
+    data= Product_Size.objects.filter(Product=product)
+    single_size = Product_Size.objects.get(id=pk)
+    form = ProductSizeForm(instance = single_size)
+    if request.method == 'POST':
+        form = ProductSizeForm( request.POST or None, instance=single_size)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_product_size',product=product)
+
+    context = {
+        'data':data,
+        'form':form,
+    }
+    return TemplateResponse(request, 'dashboard/size.html',context)
+
+@login_required()
+def productsize_delete(request,product,pk):
+    data = Product_Size.objects.get(id=pk)
+    data.delete()
+    return redirect('admin_product_size',product=product)
+
+
+@login_required
+def productthickness(request,product):
+    data = Product_Thickness.objects.filter(Product=product)
+    form = ProductThicknessForm()
+    if request.method == 'POST':
+        form = ProductThicknessForm(request.POST or None)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_product_thickness',product=product)
+
+    context = {
+        'data':data,
+        'form':form
+    }
+    return TemplateResponse(request, 'dashboard/thickness.html',context)
+
+@login_required
+def productthickness_edit(request,pk,product):
+    data= Product_Thickness.objects.filter(Product=product)
+    single_thickness = Product_Thickness.objects.get(id=pk)
+    form = ProductThicknessForm(instance = single_thickness)
+    if request.method == 'POST':
+        form = ProductThicknessForm( request.POST or None, instance=single_thickness)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_product_thickness',product=product)
+
+    context = {
+        'data':data,
+        'form':form,
+    }
+    return TemplateResponse(request, 'dashboard/thickness.html',context)
+
+@login_required()
+def productthickness_delete(request,product,pk):
+    data = Product_Thickness.objects.get(id=pk)
+    data.delete()
+    return redirect('admin_product_thickness',product=product)

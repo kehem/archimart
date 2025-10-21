@@ -33,9 +33,18 @@ urlpatterns = [
     path('api/admin_specification/<product>',views.admin_specification,name="admin_specification"),
     path('api/admin_edit_specification/<product>/<pk>',views.admin_edit_specification,name="admin_edit_specification"),
     path('api/admin_delete_specification/<product>/<pk>',views.admin_delete_specification,name="admin_delete_specification"),
+    
     path('api/admin_product_color/<product>',views.productcolor,name="admin_product_color"),
     path('api/admin_product_color_edit/<product>/<pk>',views.productcolor_edit,name="product_color_edit"),
     path('api/admin_product_color_delete/<product>/<pk>',views.productcolor_delete,name="product_color_delete"),
+
+    path('api/admin_product_size/<product>',views.productsize,name="admin_product_size"),
+    path('api/admin_product_size_edit/<product>/<pk>',views.productsize_edit,name="product_size_edit"),
+    path('api/admin_product_size_delete/<product>/<pk>',views.productsize_delete,name="product_size_delete"),
+
+    path('api/admin_product_thickness/<product>',views.productthickness,name="admin_product_thickness"),
+    path('api/admin_product_thickness_edit/<product>/<pk>',views.productthickness_edit,name="product_thickness_edit"),
+    path('api/admin_product_thickness_delete/<product>/<pk>',views.productthickness_delete,name="product_thickness_delete"),
 
     path('api/product.json',views.json_file,name="product_json"),
     path('api/properties',views.search_data,name="search"),

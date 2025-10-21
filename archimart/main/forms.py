@@ -56,3 +56,13 @@ class ProductColorForm(forms.ModelForm):
     class Meta:
         model = Product_Color
         fields = '__all__'
+
+class ProductSizeForm(forms.ModelForm):
+    class Meta:
+        model = Product_Size
+        fields = '__all__'
+
+class ProductThicknessForm(forms.ModelForm):
+    class Meta:
+        model = Product_Thickness
+        fields = '__all__'
