@@ -338,14 +338,14 @@ def get_paginated_products(request,page_number, per_page, category=None, sub_cat
             'category': product.subsubcategory.subcategory.category.name,
             "subcategory": product.subsubcategory.subcategory.name,
             "subsubcategory": product.subsubcategory.name,
-
-            "images": [request.build_absolute_uri(img.image.url) for img in product.productimage_set.all()],
-            
-
-            "specifications": [
-            {"key": spec.key, "value": spec.value, "price": spec.price}
-            for spec in product.specification_set.all()
+            "specifications": product.Specification,
+            "images": [
+                request.build_absolute_uri(img.url)
+                for img in (product.image1, product.image2, product.image3)
+                if img and getattr(img, "url", None)
             ],
+
+            
             
         })
 
@@ -426,7 +426,7 @@ def get_similar_products(request):
 def single_product(request, pk):
     try:
         product = Product.objects.prefetch_related(
-            "productimage_set", "specification_set", "similar_products"
+            "product_color_set","product_size_set","product_thickness_set","similar_products","specification_set"
         ).get(pk=pk)
     except Product.DoesNotExist:
         return JsonResponse({"error": "Product not found"}, status=404)
@@ -438,37 +438,56 @@ def single_product(request, pk):
         "discount": product.discount,
         "currency": product.currency,
         "description": product.description,
-        'recomended_title': product.recomended_title,
-        'recomended_text': product.recomended_text,
-        'category': product.subsubcategory.subcategory.category.name,
+        "recomended_title": product.recomended_title,
+        "recomended_text": product.recomended_text,
+        "category": product.subsubcategory.subcategory.category.name,
         "subcategory": product.subsubcategory.subcategory.name,
         "subsubcategory": product.subsubcategory.name,
-        "images": [request.build_absolute_uri(img.image.url) for img in product.productimage_set.all()],
-       
-        "color_images": [
-                {
-                    "color": p_color.color,
-                    "images": [
-                        request.build_absolute_uri(img.url)
-                        for img in (p_color.image1, p_color.image2, p_color.image3)
-                        if img and getattr(img, "url", None)
-                    ]
-                }
-                for p_color in product.product_color_set.all()
-            ],
-        "specifications": [
-            {"key": spec.key, "value": spec.value, "price": spec.price, "image": request.build_absolute_uri(spec.image.url) if spec.image else None}
-            for spec in product.specification_set.all()
+        'specifications': product.Specification,
+        "images": [
+            request.build_absolute_uri(img.url)
+            for img in (product.image1, product.image2, product.image3)
+            if img and getattr(img, "url", None)
         ],
-        "stock_combinations":[
-                {
-                    "color": p_color.color,
-                    "size": p_color.size,
-                    "thickness":p_color.thickness,
-                    "stock": p_color.stock,
-                }
-                for p_color in product.product_color_set.all()
-            ],
+        "colors": [
+            {
+                "color": p_color.color,
+                "images": [
+                    request.build_absolute_uri(img.url)
+                    for img in [p_color.image1, p_color.image2, p_color.image3]
+                    if img and getattr(img, "url", None)
+                ],
+                "stock": p_color.stock,
+                "price": p_color.price,
+            }
+            for p_color in product.product_color_set.all()
+        ],
+        "sizes": [
+            {
+                "size": p_size.size,
+                "stock": p_size.stock,
+                "price": p_size.price,
+                "images": [
+                    request.build_absolute_uri(img.url)
+                    for img in [p_size.image1, p_size.image2, p_size.image3]
+                    if img and getattr(img, "url", None)
+                ],
+            }
+            for p_size in product.product_size_set.all()
+        ],
+        "thicknesses": [
+            {
+                "thickness": p_thickness.thickness,
+                "stock": p_thickness.stock,
+                "price": p_thickness.price,
+                "images": [
+                    request.build_absolute_uri(img.url)
+                    for img in [p_thickness.image1, p_thickness.image2, p_thickness.image3]
+                    if img and getattr(img, "url", None)
+                ],
+            }
+            for p_thickness in product.product_thickness_set.all()
+        ],
         "similar_products": [
             {
                 "id": sp.id,
@@ -476,7 +495,11 @@ def single_product(request, pk):
                 "price": sp.price,
                 "discount": sp.discount,
                 "currency": sp.currency,
-                "image": request.build_absolute_uri(sp.productimage_set.first().image.url) if sp.productimage_set.exists() and sp.productimage_set.first().image else None,
+                "images": [
+                    request.build_absolute_uri(img.url)
+                    for img in (sp.image1, sp.image2, sp.image3)
+                    if img and getattr(img, "url", None)
+                ],
             }
             for sp in product.similar_products.all()
         ],
@@ -521,7 +544,11 @@ def alternative_products(request):
                     "price": float(product.price),
                     "discount": product.discount,
                     "currency": product.currency,
-                    "images": [request.build_absolute_uri(img.image.url) for img in product.productimage_set.all()],
+                    "images": [
+                        request.build_absolute_uri(img.url)
+                        for img in (product.image1, product.image2, product.image3)
+                        if img and getattr(img, "url", None)
+                    ],
                 },
                 "alternative": {
                     "id": alt.id,
@@ -529,7 +556,11 @@ def alternative_products(request):
                     "price": float(alt.price),
                     "discount": alt.discount,
                     "currency": alt.currency,
-                    "images": [request.build_absolute_uri(img.image.url) for img in alt.productimage_set.all()],
+                    "images": [
+                        request.build_absolute_uri(img.url)
+                        for img in (alt.image1, alt.image2, alt.image3)
+                        if img and getattr(img, "url", None)
+                    ],
                 },
             })
         else:
@@ -541,7 +572,11 @@ def alternative_products(request):
                     "price": float(product.price),
                     "discount": product.discount,
                     "currency": product.currency,
-                    "images": [request.build_absolute_uri(img.image.url) for img in product.productimage_set.all()],
+                    "images": [
+                        request.build_absolute_uri(img.url)
+                        for img in (product.image1, product.image2, product.image3)
+                        if img and getattr(img, "url", None)
+                    ],
                 },
                 "alternative": m,
             })
