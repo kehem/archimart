@@ -459,7 +459,7 @@ def single_product(request, pk):
                 }
                 for p_color in product.product_color_set.all()
             ],
-        "stock_combination":[
+        "stock_combinations":[
                 {
                     "color": p_color.color,
                     "size": p_color.size,
