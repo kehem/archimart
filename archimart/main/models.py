@@ -35,7 +35,7 @@ class Product(models.Model):
     recomended_title = models.CharField(max_length=100,null=True,blank=True,verbose_name="ArchiMart Recomendation Title")
     recomended_text = models.TextField(null=True,blank=True,verbose_name="ArchiMart Recomendation Text")
     subsubcategory = models.ForeignKey(SubSubCategory, on_delete=models.CASCADE, related_name='products')
-    image1 = ResizedImageField(size=[700,700],quality=85,upload_to="Product",verbose_name="Product Image")
+    image1 = ResizedImageField(size=[700,700],quality=85,upload_to="Product",verbose_name="Product Image",null=True,blank=True)
     image2 = ResizedImageField(size=[700,700],quality=85,upload_to="Product",verbose_name="Product Image",null=True,blank=True)
     image3 = ResizedImageField(size=[700,700],quality=85,upload_to="Product",verbose_name="Product Image",null=True,blank=True)
     # Self-referential ManyToMany
