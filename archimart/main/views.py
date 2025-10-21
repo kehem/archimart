@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Prefetch
 import logging
+from django.db.models import Q
 logger = logging.getLogger(__name__)  # Add at top of file
 # Create your views here.
 
@@ -305,6 +306,65 @@ def search_data(request):
 
         }
     return JsonResponse(json)
+
+
+def search_products(request):
+    query = request.GET.get("q", "").strip()
+    page_number = request.GET.get("page", 1)
+    per_page = request.GET.get("per_page", 10)
+    # If per_page is a numeric string or int, cap it to 50 without raising exceptions
+    if isinstance(per_page, str) and per_page.isdigit():
+        per_page = min(int(per_page), 50)
+    elif isinstance(per_page, int):
+        per_page = min(per_page, 50)
+    try:
+        per_page = int(per_page)
+        if per_page <= 0:
+            per_page = 10
+    except (TypeError, ValueError):
+        per_page = 10
+
+    if query:
+        products_qs = Product.objects.filter(
+            Q(name__icontains=query) | Q(description__icontains=query)
+        ).distinct().order_by("id")
+    else:
+        products_qs = Product.objects.all().order_by("id")
+
+    paginator = Paginator(products_qs, per_page)
+    page_obj = paginator.get_page(page_number)
+
+    results = []
+    for product in page_obj.object_list:
+        results.append({
+            "id": product.id,
+            "name": product.name,
+            "price": product.price,
+            "discount": product.discount,
+            "currency": product.currency,
+            "description": product.description,
+            "recomended_title": getattr(product, "recomended_title", None),
+            "recomended_text": getattr(product, "recomended_text", None),
+            "category": product.subsubcategory.subcategory.category.name if getattr(product, "subsubcategory", None) else None,
+            "subcategory": product.subsubcategory.subcategory.name if getattr(product, "subsubcategory", None) else None,
+            "subsubcategory": product.subsubcategory.name if getattr(product, "subsubcategory", None) else None,
+            "specifications": getattr(product, "Specification", None),
+            "images": [
+                request.build_absolute_uri(img.url)
+                for img in (product.image1, product.image2, product.image3)
+                if img and getattr(img, "url", None)
+            ],
+        })
+
+    data = {
+        "count": paginator.count,
+        "num_pages": paginator.num_pages,
+        "current_page": page_obj.number,
+        "has_next": page_obj.has_next(),
+        "has_previous": page_obj.has_previous(),
+        "results": results,
+    }
+    return JsonResponse(data, safe=False)
 
 def get_paginated_products(request,page_number, per_page, category=None, sub_category=None, sub_sub_category=None):
     products_qs = Product.objects.prefetch_related(

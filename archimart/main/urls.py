@@ -51,7 +51,7 @@ urlpatterns = [
     path('api/single_product/<pk>',views.single_product,name="single_product"),
     path("api/similar-products/", views.get_similar_products, name="ajax_similar_products"),
     path('api/alternative', views.alternative_products, name='alternative_products'),
-
+    path('api/search',views.search_products,name="search_products"),
 ]
 
 if settings.DEBUG:
