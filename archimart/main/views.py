@@ -433,7 +433,7 @@ def search_products(request):
 
 def get_paginated_products(request,page_number, per_page, category=None, sub_category=None, sub_sub_category=None):
     products_qs = Product.objects.prefetch_related(
-        "product_size_set", "product_color_set"
+        "product_color_set","product_size_set","product_thickness_set","similar_products","specification_set"
     ).order_by("id")
     # Apply filters if provided
     if category:
