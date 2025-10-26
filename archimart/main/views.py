@@ -456,14 +456,6 @@ def get_paginated_products(request,page_number, per_page, category=None, sub_cat
             "name": product.name,
             "price": product.price,
             "discount": product.discount,
-            "currency": product.currency,
-            "description": product.description,
-            'recomended_title': product.recomended_title,
-            'recomended_text': product.recomended_text,
-            'category': product.subsubcategory.subcategory.category.name,
-            "subcategory": product.subsubcategory.subcategory.name,
-            "subsubcategory": product.subsubcategory.name,
-            "specifications": product.Specification,
             "images": [
                 request.build_absolute_uri(img.url)
                 for img in (product.image1, product.image2, product.image3)
