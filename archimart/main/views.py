@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Prefetch
 import logging,json
-import requests
+# import requests
 from django.db.models import Q
 from django.conf import settings
 from django.core.cache import cache
