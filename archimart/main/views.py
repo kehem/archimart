@@ -6,8 +6,11 @@ from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Prefetch
-import logging
+import logging,json
+import requests
 from django.db.models import Q
+from django.conf import settings
+from django.core.cache import cache
 logger = logging.getLogger(__name__)  # Add at top of file
 # Create your views here.
 
@@ -26,6 +29,68 @@ def compare(request):
 
 def detail(request):
     return TemplateResponse(request, 'archimart/product.html')
+
+def grant_token(app_key, app_secret, username, password):
+
+    cache_key = f"bkash_token:{app_key}:{username}"
+    token = cache.get(cache_key)
+    if token:
+        return token
+
+    url = 'https://checkout.sandbox.bka.sh/v1.2.0-beta/checkout/token/grant'
+    headers = {
+        'Content-Type': 'application/json',
+        'username': username,
+        'password': password,
+    }
+    data = {
+        'app_key': app_key,
+        'app_secret': app_secret,
+    }
+
+    try:
+        response = requests.post(url, headers=headers, data=json.dumps(data), timeout=10)
+        response.raise_for_status()
+        response_data = response.json()
+        token = response_data.get('id_token')
+        if token:
+            # Cache token for 1 hour
+            cache.set(cache_key, token, 3600)
+        return token
+    except Exception as e:
+        logger.exception("Failed to obtain bKash token: %s", e)
+        return None
+
+def bkash_payment(request):
+    data = request.body.decode('utf-8')
+    data_json = json.loads(data)
+    token = grant_token(
+        settings.BKASH_APP_KEY,
+        settings.BKASH_APP_SECRET,
+        settings.BKASH_USERNAME,
+        settings.BKASH_PASSWORD
+    )
+    url = 'https://checkout.sandbox.bka.sh/v1.2.0-beta/checkout/payment/create'
+    headers = {
+        'Authorization': token,
+        'X-APP-Key': settings.BKASH_APP_KEY,
+        'Content-Type': 'application/json',
+    }
+    data = {
+        'mode': '0011',
+        'payerReference': data_json.get('invoice'),
+        'callbackURL': 'https://archimart.com/bkash-callback/0',
+        'amount': str(data_json.get('amount')),
+        'currency': 'BDT',
+        'intent': 'sale',
+        'merchantInvoiceNumber': data_json.get('invoice'),
+    }
+    response = requests.post(url, headers=headers, data=json.dumps(data))
+    response_data = response.json()
+    return response_data
+    return JsonResponse({'token': token})
+
+
 
 def search_data(request):
     json = {
@@ -368,7 +433,7 @@ def search_products(request):
 
 def get_paginated_products(request,page_number, per_page, category=None, sub_category=None, sub_sub_category=None):
     products_qs = Product.objects.prefetch_related(
-        "productimage_set", "specification_set", "product_color_set"
+        "product_size_set", "product_color_set"
     ).order_by("id")
     # Apply filters if provided
     if category:
@@ -403,6 +468,32 @@ def get_paginated_products(request,page_number, per_page, category=None, sub_cat
                 request.build_absolute_uri(img.url)
                 for img in (product.image1, product.image2, product.image3)
                 if img and getattr(img, "url", None)
+            ],
+            "colors": [
+                {
+                    "color": p_color.color,
+                    "images": [
+                        request.build_absolute_uri(img.url)
+                        for img in [p_color.image1, p_color.image2, p_color.image3]
+                        if img and getattr(img, "url", None)
+                    ],
+                    "stock": p_color.stock,
+                    "price": p_color.price,
+                }
+                for p_color in product.product_color_set.all()
+            ],
+            "sizes": [
+                {
+                    "size": p_size.size,
+                    "stock": p_size.stock,
+                    "price": p_size.price,
+                    "images": [
+                        request.build_absolute_uri(img.url)
+                        for img in [p_size.image1, p_size.image2, p_size.image3]
+                        if img and getattr(img, "url", None)
+                    ],
+                }
+                for p_size in product.product_size_set.all()
             ],
 
             

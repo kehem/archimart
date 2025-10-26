@@ -160,3 +160,12 @@ DJANGORESIZED_DEFAULT_KEEP_META = False
 DJANGORESIZED_DEFAULT_FORCE_FORMAT = 'WEBP'
 DJANGORESIZED_DEFAULT_FORMAT_EXTENSIONS = {'WEBP': ".webp"}
 DJANGORESIZED_DEFAULT_NORMALIZE_ROTATION = True
+
+
+# bkash settings
+BKASH_APP_KEY = "your_app_key"
+BKASH_APP_SECRET = "your_app_secret"
+BKASH_USERNAME = "your_username"
+BKASH_PASSWORD = "your_password"
+BKASH_GRANT_TYPE = "your_grant_type"
+BKASH_APP_BASE_URL = 'https://checkout.sandbox.bka.sh/v1.2.0-beta' # Use sandbox for testing

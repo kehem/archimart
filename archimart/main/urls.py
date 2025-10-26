@@ -11,6 +11,8 @@ urlpatterns = [
     path('cart',views.cart,name="cart"),
     path('compare',views.compare,name="compare"),
     path('detail',views.detail,name="detail"),
+
+    path('bkash-payment/',views.bkash_payment, name='bkash_payment'),
     
 
     # dashboard 
