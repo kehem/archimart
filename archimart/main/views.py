@@ -1173,6 +1173,7 @@ def productthickness(request, product):
             return redirect('admin_product_thickness', product=product)
     else:
         form = ProductThicknessForm()
+        form.fields['Product'].required = False
         # Preselect and disable the Product field
         form.fields['Product'].initial = pro
         form.fields['Product'].widget.attrs['readonly'] = True
@@ -1195,12 +1196,14 @@ def productthickness_edit(request, pk, product):
         form = ProductThicknessForm(request.POST, request.FILES, instance=single_thickness)
         if form.is_valid():
             thickness_instance = form.save(commit=False)
-            thickness_instance.Product = pro  # ensure the Product is correctly assigned
+            thickness_instance.Product = pro  # manually set the Product
             thickness_instance.save()
             return redirect('admin_product_thickness', product=product)
     else:
         form = ProductThicknessForm(instance=single_thickness)
-        # Preselect and disable the Product field visually
+        # Remove Product from required validation in form
+        form.fields['Product'].required = False
+        # Pre-fill and disable the Product field visually
         form.fields['Product'].initial = pro
         form.fields['Product'].widget.attrs['readonly'] = True
         form.fields['Product'].widget.attrs['disabled'] = True
@@ -1210,6 +1213,7 @@ def productthickness_edit(request, pk, product):
         'form': form,
     }
     return TemplateResponse(request, 'dashboard/thickness.html', context)
+
 
 
 @login_required()
