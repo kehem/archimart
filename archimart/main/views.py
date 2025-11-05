@@ -1042,26 +1042,24 @@ def admin_delete_specification(request, product, pk):
 
 @login_required
 def productcolor(request, product):
-    pro = Product.objects.get(id=product)
+    pro = get_object_or_404(Product, id=product)
     data = Product_Color.objects.filter(Product=pro)
 
     if request.method == 'POST':
         form = ProductColorForm(request.POST, request.FILES)
         if form.is_valid():
             color_instance = form.save(commit=False)
-            color_instance.Product = pro  # Force assign the Product
+            color_instance.Product = pro
             color_instance.save()
             return redirect('admin_product_color', product=product)
     else:
         form = ProductColorForm()
-        # Pre-fill the Product field and disable it visually
+        form.fields['Product'].widget = forms.HiddenInput()
         form.fields['Product'].initial = pro
-        form.fields['Product'].widget.attrs['readonly'] = True
-        form.fields['Product'].widget.attrs['disabled'] = True
 
     context = {
         'data': data,
-        'form': form
+        'form': form,
     }
     return TemplateResponse(request, 'dashboard/color.html', context)
 
