@@ -1041,39 +1041,57 @@ def admin_delete_specification(request, product, pk):
 
 
 @login_required
-def productcolor(request,product):
+def productcolor(request, product):
     pro = Product.objects.get(id=product)
-    data = Product_Color.objects.filter(Product=pro.id)
-    form = ProductColorForm()
+    data = Product_Color.objects.filter(Product=pro)
+
     if request.method == 'POST':
-        form = ProductColorForm(request.POST or None, request.FILES or None)
+        form = ProductColorForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            color_instance = form.save(commit=False)
+            color_instance.Product = pro  # Force assign the Product
+            color_instance.save()
             return redirect('admin_product_color', product=product)
+    else:
+        form = ProductColorForm()
+        # Pre-fill the Product field and disable it visually
+        form.fields['Product'].initial = pro
+        form.fields['Product'].widget.attrs['readonly'] = True
+        form.fields['Product'].widget.attrs['disabled'] = True
 
     context = {
-        'data':data,
-        'form':form
+        'data': data,
+        'form': form
     }
-    return TemplateResponse(request, 'dashboard/color.html',context)
+    return TemplateResponse(request, 'dashboard/color.html', context)
+
 
 @login_required
-def productcolor_edit(request,product,pk):
+def productcolor_edit(request, product, pk):
     pro = Product.objects.get(id=product)
-    data= Product_Color.objects.filter(Product=pro.id)
+    data = Product_Color.objects.filter(Product=pro)
     single_color = Product_Color.objects.get(id=pk)
-    form = ProductColorForm(instance = single_color)
+
     if request.method == 'POST':
-        form = ProductColorForm( request.POST or None, request.FILES or None,instance=single_color)
+        form = ProductColorForm(request.POST, request.FILES, instance=single_color)
         if form.is_valid():
-            form.save()
-            return redirect('admin_product_color',product=product)
+            color_instance = form.save(commit=False)
+            color_instance.Product = pro  # force keep the same product
+            color_instance.save()
+            return redirect('admin_product_color', product=product)
+    else:
+        form = ProductColorForm(instance=single_color)
+        # Preselect and disable Product field visually
+        form.fields['Product'].initial = pro
+        form.fields['Product'].widget.attrs['readonly'] = True
+        form.fields['Product'].widget.attrs['disabled'] = True
 
     context = {
-        'data':data,
-        'form':form,
+        'data': data,
+        'form': form,
     }
-    return TemplateResponse(request, 'dashboard/color.html',context)
+    return TemplateResponse(request, 'dashboard/color.html', context)
+
 
 @login_required()
 def productcolor_delete(request,product,pk):
@@ -1082,37 +1100,57 @@ def productcolor_delete(request,product,pk):
     return redirect('admin_product_color',product=product)
 
 @login_required
-def productsize(request,product):
-    data = Product_Size.objects.filter(Product=product)
-    form = ProductSizeForm()
+def productsize(request, product):
+    pro = Product.objects.get(id=product)
+    data = Product_Size.objects.filter(Product=pro)
+
     if request.method == 'POST':
-        form = ProductSizeForm(request.POST or None, request.FILES or None)
+        form = ProductSizeForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return redirect('admin_product_size',product=product)
+            size_instance = form.save(commit=False)
+            size_instance.Product = pro  # link the product manually
+            size_instance.save()
+            return redirect('admin_product_size', product=product)
+    else:
+        form = ProductSizeForm()
+        # Preselect and disable the Product field visually
+        form.fields['Product'].initial = pro
+        form.fields['Product'].widget.attrs['readonly'] = True
+        form.fields['Product'].widget.attrs['disabled'] = True
 
     context = {
-        'data':data,
-        'form':form
+        'data': data,
+        'form': form
     }
-    return TemplateResponse(request, 'dashboard/size.html',context)
+    return TemplateResponse(request, 'dashboard/size.html', context)
+
 
 @login_required
-def productsize_edit(request,product,pk):
-    data= Product_Size.objects.filter(Product=product)
+def productsize_edit(request, product, pk):
+    pro = Product.objects.get(id=product)
+    data = Product_Size.objects.filter(Product=pro)
     single_size = Product_Size.objects.get(id=pk)
-    form = ProductSizeForm(instance = single_size)
+
     if request.method == 'POST':
-        form = ProductSizeForm( request.POST or None,request.FILES or None, instance=single_size)
+        form = ProductSizeForm(request.POST, request.FILES, instance=single_size)
         if form.is_valid():
-            form.save()
-            return redirect('admin_product_size',product=product)
+            size_instance = form.save(commit=False)
+            size_instance.Product = pro  # ensure product is assigned
+            size_instance.save()
+            return redirect('admin_product_size', product=product)
+    else:
+        form = ProductSizeForm(instance=single_size)
+        # Preselect and disable the Product field visually
+        form.fields['Product'].initial = pro
+        form.fields['Product'].widget.attrs['readonly'] = True
+        form.fields['Product'].widget.attrs['disabled'] = True
 
     context = {
-        'data':data,
-        'form':form,
+        'data': data,
+        'form': form,
     }
-    return TemplateResponse(request, 'dashboard/size.html',context)
+    return TemplateResponse(request, 'dashboard/size.html', context)
+
 
 @login_required()
 def productsize_delete(request,product,pk):
@@ -1122,37 +1160,57 @@ def productsize_delete(request,product,pk):
 
 
 @login_required
-def productthickness(request,product):
-    data = Product_Thickness.objects.filter(Product=product)
-    form = ProductThicknessForm()
+def productthickness(request, product):
+    pro = Product.objects.get(id=product)
+    data = Product_Thickness.objects.filter(Product=pro)
+
     if request.method == 'POST':
-        form = ProductThicknessForm(request.POST or None, request.FILES or None)
+        form = ProductThicknessForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return redirect('admin_product_thickness',product=product)
+            thickness_instance = form.save(commit=False)
+            thickness_instance.Product = pro  # manually assign the Product
+            thickness_instance.save()
+            return redirect('admin_product_thickness', product=product)
+    else:
+        form = ProductThicknessForm()
+        # Preselect and disable the Product field
+        form.fields['Product'].initial = pro
+        form.fields['Product'].widget.attrs['readonly'] = True
+        form.fields['Product'].widget.attrs['disabled'] = True
 
     context = {
-        'data':data,
-        'form':form
+        'data': data,
+        'form': form
     }
-    return TemplateResponse(request, 'dashboard/thickness.html',context)
+    return TemplateResponse(request, 'dashboard/thickness.html', context)
+
 
 @login_required
-def productthickness_edit(request,pk,product):
-    data= Product_Thickness.objects.filter(Product=product)
+def productthickness_edit(request, pk, product):
+    pro = Product.objects.get(id=product)
+    data = Product_Thickness.objects.filter(Product=pro)
     single_thickness = Product_Thickness.objects.get(id=pk)
-    form = ProductThicknessForm(instance = single_thickness)
+
     if request.method == 'POST':
-        form = ProductThicknessForm( request.POST or None, request.FILES or None, instance=single_thickness)
+        form = ProductThicknessForm(request.POST, request.FILES, instance=single_thickness)
         if form.is_valid():
-            form.save()
-            return redirect('admin_product_thickness',product=product)
+            thickness_instance = form.save(commit=False)
+            thickness_instance.Product = pro  # ensure the Product is correctly assigned
+            thickness_instance.save()
+            return redirect('admin_product_thickness', product=product)
+    else:
+        form = ProductThicknessForm(instance=single_thickness)
+        # Preselect and disable the Product field visually
+        form.fields['Product'].initial = pro
+        form.fields['Product'].widget.attrs['readonly'] = True
+        form.fields['Product'].widget.attrs['disabled'] = True
 
     context = {
-        'data':data,
-        'form':form,
+        'data': data,
+        'form': form,
     }
-    return TemplateResponse(request, 'dashboard/thickness.html',context)
+    return TemplateResponse(request, 'dashboard/thickness.html', context)
+
 
 @login_required()
 def productthickness_delete(request,product,pk):
