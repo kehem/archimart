@@ -1086,7 +1086,7 @@ def productsize(request,product):
     data = Product_Size.objects.filter(Product=product)
     form = ProductSizeForm()
     if request.method == 'POST':
-        form = ProductSizeForm(request.POST or None)
+        form = ProductSizeForm(request.POST or None, request.FILES or None)
         if form.is_valid():
             form.save()
             return redirect('admin_product_size',product=product)
@@ -1103,7 +1103,7 @@ def productsize_edit(request,product,pk):
     single_size = Product_Size.objects.get(id=pk)
     form = ProductSizeForm(instance = single_size)
     if request.method == 'POST':
-        form = ProductSizeForm( request.POST or None, instance=single_size)
+        form = ProductSizeForm( request.POST or None,request.FILES or None, instance=single_size)
         if form.is_valid():
             form.save()
             return redirect('admin_product_size',product=product)
@@ -1126,7 +1126,7 @@ def productthickness(request,product):
     data = Product_Thickness.objects.filter(Product=product)
     form = ProductThicknessForm()
     if request.method == 'POST':
-        form = ProductThicknessForm(request.POST or None)
+        form = ProductThicknessForm(request.POST or None, request.FILES or None)
         if form.is_valid():
             form.save()
             return redirect('admin_product_thickness',product=product)
@@ -1143,7 +1143,7 @@ def productthickness_edit(request,pk,product):
     single_thickness = Product_Thickness.objects.get(id=pk)
     form = ProductThicknessForm(instance = single_thickness)
     if request.method == 'POST':
-        form = ProductThicknessForm( request.POST or None, instance=single_thickness)
+        form = ProductThicknessForm( request.POST or None, request.FILES or None, instance=single_thickness)
         if form.is_valid():
             form.save()
             return redirect('admin_product_thickness',product=product)
