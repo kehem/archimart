@@ -458,6 +458,7 @@ def get_paginated_products(request,page_number, per_page, category=None, sub_cat
     if sub_sub_category:
         logger.info("Subsubcategory filter: %s", sub_sub_category)
         products_qs = products_qs.filter(subsubcategory__name__iexact=sub_sub_category)
+        logger.info("Subsubcategory filter: %s", products_qs.count())
     elif sub_category:
         logger.info("Subcategory filter: %s", sub_category)
         products_qs = products_qs.filter(subsubcategory__subcategory__name__iexact=sub_category)
