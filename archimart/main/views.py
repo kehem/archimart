@@ -1286,7 +1286,7 @@ def admin_order_detail(request, order_id):
         if new_status in dict(Order._meta.get_field('status').choices).keys():
             order.status = new_status
             order.save()
-            return redirect('order_detail', order_id=order.id)
+            return redirect('admin_order_details', order_id=order.id)
     
     # Add status_choices to context
     context = {
