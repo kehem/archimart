@@ -785,7 +785,7 @@ def create_order(request):
             return JsonResponse({
                 "success": True,
                 "order_id": order.id,
-                "total_amount": order.total_amount
+                "total_amount": order.total
             }, status=201)
 
         except Exception as e:
