@@ -784,7 +784,7 @@ def create_order(request):
 
             return JsonResponse({
                 "success": True,
-                "order_id": order.id,
+                "order_id": order.invoice_number,
                 "total_amount": order.total
             }, status=201)
 
