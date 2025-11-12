@@ -749,19 +749,7 @@ def alternative_products(request):
 
 
 def create_order(request):
-    """
-    Example request (JSON):
-    {
-        "customer_name": "Anirban Singha",
-        "customer_phone": "017xxxxxxxx",
-        "customer_address": "Dhaka, Bangladesh",
-        "pay_method": "Cash on Delivery",
-        "items": [
-            {"product_id": 1, "quantity": 2, "color": "Brown"},
-            {"product_id": 2, "quantity": 1, "size": "Large"}
-        ]
-    }
-    """
+    
     if request.method == "POST":
         try:
             data = json.loads(request.body)

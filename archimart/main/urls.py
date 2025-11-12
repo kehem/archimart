@@ -48,6 +48,7 @@ urlpatterns = [
     path('api/admin_product_thickness_edit/<product>/<pk>',views.productthickness_edit,name="product_thickness_edit"),
     path('api/admin_product_thickness_delete/<product>/<pk>',views.productthickness_delete,name="product_thickness_delete"),
 
+    path('api/create_order',views.create_order,name="create_order"),
     path('api/admin_orders',views.admin_order,name="admin_orders"),
     path('api/admin_order_details/<pk>',views.admin_order_detail,name="admin_order_details"),
 
