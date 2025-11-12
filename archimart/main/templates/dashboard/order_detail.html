@@ -11,9 +11,9 @@
         {% csrf_token %}
         <label for="status" class="me-2 fw-semibold">Status:</label>
         <select name="status" id="status" class="form-select me-2" style="width: 200px;">
-          {% for key, value in order._meta.get_field('status').choices %}
+        {% for key, value in status_choices %}
             <option value="{{ key }}" {% if key == order.status %}selected{% endif %}>{{ value }}</option>
-          {% endfor %}
+        {% endfor %}
         </select>
         <button type="submit" class="btn btn-primary btn-sm">Update</button>
       </form>

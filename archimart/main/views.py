@@ -1279,14 +1279,18 @@ def admin_order(request):
 def admin_order_detail(request, order_id):
     """Display or update a single order."""
     order = get_object_or_404(Order.objects.prefetch_related('items__product'), id=order_id)
-
+    
     # Handle status update
     if request.method == "POST":
         new_status = request.POST.get("status")
         if new_status in dict(Order._meta.get_field('status').choices).keys():
             order.status = new_status
             order.save()
-        return redirect('order_detail', order_id=order.id)
-
-    context = {"order": order}
+            return redirect('order_detail', order_id=order.id)
+    
+    # Add status_choices to context
+    context = {
+        "order": order,
+        "status_choices": Order._meta.get_field('status').choices  # Add this line
+    }
     return TemplateResponse(request, "dashboard/order_detail.html", context)
