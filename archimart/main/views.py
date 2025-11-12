@@ -11,6 +11,7 @@ import logging,json
 from django.db.models import Q
 from django.conf import settings
 from django.core.cache import cache
+from django.views.decorators.csrf import csrf_exempt
 logger = logging.getLogger(__name__)  # Add at top of file
 # Create your views here.
 
@@ -747,7 +748,7 @@ def alternative_products(request):
 
     return JsonResponse(alternatives, safe=False)
 
-
+@csrf_exempt
 def create_order(request):
     
     if request.method == "POST":
@@ -761,6 +762,8 @@ def create_order(request):
                 customer_address=data.get("customer_address"),
                 customer_email=data.get("customer_email"),
                 pay_method=data.get("pay_method", "Cash on Delivery"),
+                invoice_number=data.get("invoice_number"),
+                total = data.get("total_amount", 0.0),
             )
 
             # Loop through products

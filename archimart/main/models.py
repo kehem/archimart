@@ -122,7 +122,7 @@ class Order(models.Model):
     invoice_number = models.CharField(max_length=100, null=True, blank=True)
     order_date = models.DateTimeField(auto_now_add=True)
     invoice = models.FileField(upload_to='invoices/', null=True, blank=True)
-
+    total = models.FloatField(default=0)
     def __str__(self):
         return f"Order #{self.id} - {self.customer_name}"
 
