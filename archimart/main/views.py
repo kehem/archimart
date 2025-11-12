@@ -763,7 +763,7 @@ def create_order(request):
                 customer_email=data.get("customer_email"),
                 pay_method=data.get("pay_method", "Cash on Delivery"),
                 invoice_number=data.get("invoice_number"),
-                total = data.get("total_amount", 0.0),
+                total = data.get("total", 0.0),
             )
 
             # Loop through products
