@@ -1285,7 +1285,7 @@ def admin_order(request):
     return TemplateResponse(request, "dashboard/order.html", context)
 
 
-def order_detail(request, order_id):
+def admin_order_detail(request, order_id):
     """Display or update a single order."""
     order = get_object_or_404(Order.objects.prefetch_related('items__product'), id=order_id)
 
