@@ -1269,7 +1269,7 @@ def productthickness_delete(request,product,pk):
 # Order Management Start Here
 def admin_order(request):
     """Return all orders with their items."""
-    orders = Order.objects.all()
+    orders = Order.objects.all().order_by('-id')
     context = {
         "data": orders,
     }
