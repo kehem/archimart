@@ -99,3 +99,46 @@ class Product_Thickness(models.Model):
     image3 = ResizedImageField(size=[700,700],quality=85,upload_to="Product",verbose_name="Product Image",null=True,blank=True) 
     def __str__(self):
         return f"{self.Product.name} --> {self.thickness}"
+    
+
+
+class Order(models.Model):
+    customer_name = models.CharField(max_length=100)
+    customer_phone = models.CharField(max_length=15)
+    customer_address = models.TextField()
+    customer_email = models.EmailField(null=True, blank=True)
+    pay_method = models.CharField(max_length=50, choices=(
+        ('Cash on Delivery', 'Cash on Delivery'),
+        ('Online Payment', 'Online Payment'),
+    ), default='Cash on Delivery')
+    transection_id = models.CharField(max_length=100, null=True, blank=True)
+    status = models.CharField(max_length=50, choices=(
+        ('Pending', 'Pending'),
+        ('Processing', 'Processing'),
+        ('Shipped', 'Shipped'),
+        ('Delivered', 'Delivered'),
+        ('Cancelled', 'Cancelled'),
+    ), default='Pending')
+    invoice_number = models.CharField(max_length=100, null=True, blank=True)
+    order_date = models.DateTimeField(auto_now_add=True)
+    invoice = models.FileField(upload_to='invoices/', null=True, blank=True)
+
+    def __str__(self):
+        return f"Order #{self.id} - {self.customer_name}"
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
+    product = models.ForeignKey('Product', on_delete=models.PROTECT)
+    quantity = models.PositiveIntegerField(default=1)
+    color = models.CharField(max_length=50, null=True, blank=True)
+    size = models.CharField(max_length=50, null=True, blank=True)
+    thickness = models.CharField(max_length=50, null=True, blank=True)
+    price = models.FloatField(default=0)
+
+    @property
+    def total_price(self):
+        return self.price * self.quantity
+
+    def __str__(self):
+        return f"{self.product.name} × {self.quantity} ({self.order.customer_name})"

@@ -746,6 +746,69 @@ def alternative_products(request):
             })
 
     return JsonResponse(alternatives, safe=False)
+
+
+def create_order(request):
+    """
+    Example request (JSON):
+    {
+        "customer_name": "Anirban Singha",
+        "customer_phone": "017xxxxxxxx",
+        "customer_address": "Dhaka, Bangladesh",
+        "pay_method": "Cash on Delivery",
+        "items": [
+            {"product_id": 1, "quantity": 2, "color": "Brown"},
+            {"product_id": 2, "quantity": 1, "size": "Large"}
+        ]
+    }
+    """
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+
+            # Create the order
+            order = Order.objects.create(
+                customer_name=data.get("customer_name"),
+                customer_phone=data.get("customer_phone"),
+                customer_address=data.get("customer_address"),
+                customer_email=data.get("customer_email"),
+                pay_method=data.get("pay_method", "Cash on Delivery"),
+            )
+
+            # Loop through products
+            for item in data.get("items", []):
+                product = Product.objects.get(id=item["product_id"])
+                quantity = int(item.get("quantity", 1))
+                price = product.price
+
+                OrderItem.objects.create(
+                    order=order,
+                    product=product,
+                    quantity=quantity,
+                    color=item.get("color"),
+                    size=item.get("size"),
+                    thickness=item.get("thickness"),
+                    price=price,
+                )
+
+            return JsonResponse({
+                "success": True,
+                "order_id": order.id,
+                "total_amount": order.total_amount
+            }, status=201)
+
+        except Exception as e:
+            return JsonResponse({"success": False, "error": str(e)}, status=400)
+
+    return JsonResponse({"detail": "Only POST allowed"}, status=405)
+
+
+
+
+
+
+
+
 #######################################
 # Dashboard Start After this code 
 ############################################
@@ -1208,3 +1271,31 @@ def productthickness_delete(request,product,pk):
     data = Product_Thickness.objects.get(id=pk)
     data.delete()
     return redirect('admin_product_thickness',product=product)
+
+
+
+
+# Order Management Start Here
+def admin_order(request):
+    """Return all orders with their items."""
+    orders = Order.objects.all()
+    context = {
+        "data": orders,
+    }
+    return TemplateResponse(request, "dashboard/order.html", context)
+
+
+def order_detail(request, order_id):
+    """Display or update a single order."""
+    order = get_object_or_404(Order.objects.prefetch_related('items__product'), id=order_id)
+
+    # Handle status update
+    if request.method == "POST":
+        new_status = request.POST.get("status")
+        if new_status in dict(Order._meta.get_field('status').choices).keys():
+            order.status = new_status
+            order.save()
+        return redirect('order_detail', order_id=order.id)
+
+    context = {"order": order}
+    return TemplateResponse(request, "dashboard/order_detail.html", context)

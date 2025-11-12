@@ -66,3 +66,8 @@ class ProductThicknessForm(forms.ModelForm):
     class Meta:
         model = Product_Thickness
         fields = '__all__'
+
+class orderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = '__all__'
