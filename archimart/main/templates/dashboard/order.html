@@ -19,7 +19,7 @@
                         <th scope="col">Client Name</th>
                         <th scope="col">Mobile</th>
                         <th scope="col">Address</th>
-                        <th scope="col">Transection ID</th>
+                        <th scope="col">Payment Method</th>
                         <th scope="col">View</th>
                         </tr>
                     </thead>
@@ -30,7 +30,7 @@
                                 <td>{{s.customer_name}}</td>
                                 <td>{{s.customer_phone}}</td>
                                 <td>{{s.customer_address}}</td>
-                                <td>{{s.transection_id}}</td>
+                                <td>{{s.pay_method}}</td>
                                 <td>
                                   <a href="{% url "admin_order_details" s.id %}" class="btn btn-primary">Edit</a>
                                 </td>
