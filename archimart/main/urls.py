@@ -50,7 +50,7 @@ urlpatterns = [
 
     path('api/create_order',views.create_order,name="create_order"),
     path('api/admin_orders',views.admin_order,name="admin_orders"),
-    path('api/admin_order_details/<pk>',views.admin_order_detail,name="admin_order_details"),
+    path('api/admin_order_details/<order_id>',views.admin_order_detail,name="admin_order_details"),
 
     path('api/product.json',views.json_file,name="product_json"),
     path('api/properties',views.search_data,name="search"),
