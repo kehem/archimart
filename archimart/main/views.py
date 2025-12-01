@@ -961,7 +961,7 @@ def admin_product(request):
     # Pagination setup
     product_queryset = Product.objects.all()
     page_number = request.GET.get('page', 1)
-    paginator = Paginator(product_queryset, 10)
+    paginator = Paginator(product_queryset, 20)
     page_obj = paginator.get_page(page_number)
 
     context = {
