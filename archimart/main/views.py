@@ -529,7 +529,7 @@ def json_file(request):
     sub_category = request.GET.get("subcategory")
     sub_sub_category = request.GET.get("subsubcategory")
     page_number = int(request.GET.get("page", 1))
-    per_page = int(request.GET.get("per_page", 10))
+    per_page = int(request.GET.get("per_page", 12))
     
     data = get_paginated_products(
         request,page_number, per_page, category, sub_category, sub_sub_category
