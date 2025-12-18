@@ -537,56 +537,84 @@ def json_file(request):
     return JsonResponse(data, safe=False)
 
 
-def get_similar_products(request):
-    sub_id = request.GET.get("product_id")
-    option = request.GET.get("option")
-    print (sub_id, option)
-    if sub_id:
-        sub_id = sub_id.split(",")
-        # For each product id, get its most expensive similar product
-        result = []
-        for pid in sub_id:
-            try:
-                product = Product.objects.get(id=pid)
-                if option == "high":
-                    similar = product.similar_products.all().order_by("-price").first()
-                    if similar and similar.price > product.price:
-                        pass
-                    else:
-                        similar = None
-                elif option == "low":
-                    similar = product.similar_products.all().order_by("price").first()
-                    if similar and similar.price < product.price:
-                        pass
-                    else:
-                        similar = None
+# def get_similar_products(request):
+#     sub_id = request.GET.get("product_id")
+#     option = request.GET.get("option")
+#     print (sub_id, option)
+#     if sub_id:
+#         sub_id = sub_id.split(",")
+#         # For each product id, get its most expensive similar product
+#         result = []
+#         for pid in sub_id:
+#             try:
+#                 product = Product.objects.get(id=pid)
+#                 if option == "high":
+#                     similar = product.similar_products.all().order_by("-price").first()
+#                     if similar and similar.price > product.price:
+#                         pass
+#                     else:
+#                         similar = None
+#                 elif option == "low":
+#                     similar = product.similar_products.all().order_by("price").first()
+#                     if similar and similar.price < product.price:
+#                         pass
+#                     else:
+#                         similar = None
 
-                if similar:
-                    result.append({
-                        "product_id": product.id,
-                        "product_name": product.name,
-                        "price": product.price,
-                        "discount": product.discount,
-                        "alternate": {
-                            "id": similar.id,
-                            "name": similar.name,
-                            "price": similar.price,
-                            "discount": similar.discount,
-                        }
-                    })
-                else:
-                    result.append({
-                        "product_id": product.id,
-                        "product_name": product.name,
-                        "price": product.price,
-                        "discount": product.discount,
-                        "alternate": None
-                    })
-            except Product.DoesNotExist:
-                continue
-        data = result
-    else:
+#                 if similar:
+#                     result.append({
+#                         "product_id": product.id,
+#                         "product_name": product.name,
+#                         "price": product.price,
+#                         "discount": product.discount,
+#                         "alternate": {
+#                             "id": similar.id,
+#                             "name": similar.name,
+#                             "price": similar.price,
+#                             "discount": similar.discount,
+#                         }
+#                     })
+#                 else:
+#                     result.append({
+#                         "product_id": product.id,
+#                         "product_name": product.name,
+#                         "price": product.price,
+#                         "discount": product.discount,
+#                         "alternate": None
+#                     })
+#             except Product.DoesNotExist:
+#                 continue
+#         data = result
+#     else:
+#         data = []
+#     return JsonResponse(data, safe=False)
+
+
+def get_similar_products(request):
+    """AJAX endpoint for the dual-listbox.
+
+    Expects GET params:
+      - subsubcategory_id: id of SubSubCategory to list products from
+      - current_id: optional id of current product to exclude
+
+    Returns a JSON list of objects with `id` and `name`.
+    """
+    sub_id = request.GET.get("subsubcategory_id")
+    current_id = request.GET.get("current_id")
+
+    if not sub_id:
+        return JsonResponse([], safe=False)
+
+    try:
+        qs = Product.objects.filter(subsubcategory_id=sub_id)
+        if current_id:
+            qs = qs.exclude(id=current_id)
+        qs = qs.order_by("name")
+        data = list(qs.values("id", "name"))
+    except Exception as e:
+        logger.exception("ajax_similar_products error: %s", e)
         data = []
+
     return JsonResponse(data, safe=False)
 
 def single_product(request, pk):
