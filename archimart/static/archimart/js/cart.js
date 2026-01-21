@@ -97,17 +97,14 @@ function clearCart() {
   console.log('Cart cleared:', cartItems); // Debug
 }
 
-function downloadPDF() {
+function downloadPDF(isConfirm = false) {
   if (cartItems.length === 0) {
     alert("Cannot download PDF: Cart is empty.");
     return;
   }
 
   // Check if form validation is needed (when called from confirm button)
-  const confirmBtn = document.querySelector(".confirm-btn");
-  const isConfirmAction = event && event.target === confirmBtn;
-  
-  if (isConfirmAction) {
+  if (isConfirm) {
     const inputs = document.querySelectorAll('input[required]');
     const paymentSelected = document.querySelector('input[name="payment"]:checked');
     
@@ -151,56 +148,61 @@ function downloadPDF() {
 
   downloadBtn.style.display = "none";
 
-  const a4Width = 210;
-  const a4Height = 297;
+  html2canvas(element, { scale: 2, useCORS: true }).then(canvas => {
+    try {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4"
+      });
 
-  html2canvas(element, { scale: 2 }).then(canvas => {
-    const imgData = canvas.toDataURL("image/png");
-    const pdf = new jsPDF({
-      orientation: "portrait",
-      unit: "mm",
-      format: "a4"
-    });
+      const a4Width = 210;
+      const a4Height = 297;
 
-    const imgProps = pdf.getImageProperties(imgData);
-    const canvasAspectRatio = imgProps.width / imgProps.height;
-    const a4AspectRatio = a4Width / a4Height;
+      const imgProps = pdf.getImageProperties(imgData);
+      const canvasAspectRatio = imgProps.width / imgProps.height;
+      const a4AspectRatio = a4Width / a4Height;
 
-    let imgWidth, imgHeight;
-    if (canvasAspectRatio > a4AspectRatio) {
-      imgWidth = a4Width;
-      imgHeight = a4Width / canvasAspectRatio;
-    } else {
-      imgHeight = a4Height;
-      imgWidth = a4Height * canvasAspectRatio;
-    }
+      let imgWidth, imgHeight;
+      if (canvasAspectRatio > a4AspectRatio) {
+        imgWidth = a4Width;
+        imgHeight = a4Width / canvasAspectRatio;
+      } else {
+        imgHeight = a4Height;
+        imgWidth = a4Height * canvasAspectRatio;
+      }
 
-    const xOffset = (a4Width - imgWidth) / 2;
-    const yOffset = (a4Height - imgHeight) / 2;
+      const xOffset = (a4Width - imgWidth) / 2;
+      const yOffset = (a4Height - imgHeight) / 2;
 
-    pdf.addImage(imgData, "PNG", xOffset, yOffset, imgWidth, imgHeight);
-    pdf.save("archimart-receipt.pdf");
-    downloadBtn.style.display = "block";
-    
-    // Clear cart after successful confirmation
-    const confirmBtn = document.querySelector(".confirm-btn");
-    if (event && event.target === confirmBtn) {
-      localStorage.removeItem('combinedSelection');
-      localStorage.removeItem('cartFormData');
-      localStorage.removeItem('cartState');
-      localStorage.removeItem('cartStateForCompare');
+      pdf.addImage(imgData, "PNG", xOffset, yOffset, imgWidth, imgHeight);
+      pdf.save("archimart-receipt.pdf");
+      downloadBtn.style.display = "block";
       
-      document.getElementById("input-name").value = "";
-      document.getElementById("input-phone").value = "";
-      document.getElementById("input-address").value = "";
-      
-      clearCart();
-      const total = 0;
-      populateReceipt(cartItems, total);
-      updatePayableTo();
+      // Clear cart after successful confirmation
+      if (isConfirm) {
+        localStorage.removeItem('combinedSelection');
+        localStorage.removeItem('cartFormData');
+        localStorage.removeItem('cartState');
+        localStorage.removeItem('cartStateForCompare');
+        
+        document.getElementById("input-name").value = "";
+        document.getElementById("input-phone").value = "";
+        document.getElementById("input-address").value = "";
+        
+        clearCart();
+        const total = 0;
+        populateReceipt(cartItems, total);
+        updatePayableTo();
+      }
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      alert("Failed to generate PDF. Please try again.");
+      downloadBtn.style.display = "block";
     }
   }).catch(error => {
-    console.error("Error generating PDF:", error);
+    console.error("Error converting to canvas:", error);
     alert("Failed to generate PDF. Please try again.");
     downloadBtn.style.display = "block";
   });
