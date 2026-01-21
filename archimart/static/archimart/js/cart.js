@@ -103,6 +103,36 @@ function downloadPDF() {
     return;
   }
 
+  // Check if form validation is needed (when called from confirm button)
+  const confirmBtn = document.querySelector(".confirm-btn");
+  const isConfirmAction = event && event.target === confirmBtn;
+  
+  if (isConfirmAction) {
+    const inputs = document.querySelectorAll('input[required]');
+    const paymentSelected = document.querySelector('input[name="payment"]:checked');
+    
+    let allValid = true;
+    inputs.forEach(input => {
+      if (!input.value.trim()) {
+        input.style.borderColor = '#ff4444';
+        allValid = false;
+      } else {
+        input.style.borderColor = '#ddd';
+      }
+    });
+    
+    if (!paymentSelected) {
+      alert('Please select a payment method');
+      allValid = false;
+    }
+    
+    if (!allValid) {
+      return;
+    }
+    
+    alert('Order confirmed! You will receive a confirmation shortly.');
+  }
+
   const element = document.getElementById("receipt");
   const downloadBtn = document.querySelector(".download-btn");
 
@@ -151,6 +181,24 @@ function downloadPDF() {
     pdf.addImage(imgData, "PNG", xOffset, yOffset, imgWidth, imgHeight);
     pdf.save("archimart-receipt.pdf");
     downloadBtn.style.display = "block";
+    
+    // Clear cart after successful confirmation
+    const confirmBtn = document.querySelector(".confirm-btn");
+    if (event && event.target === confirmBtn) {
+      localStorage.removeItem('combinedSelection');
+      localStorage.removeItem('cartFormData');
+      localStorage.removeItem('cartState');
+      localStorage.removeItem('cartStateForCompare');
+      
+      document.getElementById("input-name").value = "";
+      document.getElementById("input-phone").value = "";
+      document.getElementById("input-address").value = "";
+      
+      clearCart();
+      const total = 0;
+      populateReceipt(cartItems, total);
+      updatePayableTo();
+    }
   }).catch(error => {
     console.error("Error generating PDF:", error);
     alert("Failed to generate PDF. Please try again.");
@@ -375,46 +423,4 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById("input-name")?.addEventListener('input', updatePayableTo);
   document.getElementById("input-phone")?.addEventListener('input', updatePayableTo);
   document.getElementById("input-address")?.addEventListener('input', updatePayableTo);
-
-  document.querySelector('.confirm-btn').addEventListener('click', function(e) {
-    if (cartItems.length === 0) {
-      alert("Cannot confirm order: Cart is empty.");
-      return;
-    }
-
-    const inputs = document.querySelectorAll('input[required]');
-    const paymentSelected = document.querySelector('input[name="payment"]:checked');
-
-    let allValid = true;
-    inputs.forEach(input => {
-      if (!input.value.trim()) {
-        input.style.borderColor = '#ff4444';
-        allValid = false;
-      } else {
-        input.style.borderColor = '#ddd';
-      }
-    });
-
-    if (!paymentSelected) {
-      alert('Please select a payment method');
-      allValid = false;
-    }
-
-    if (allValid) {
-      alert('Order confirmed! You will receive a confirmation shortly.');
-      localStorage.removeItem('combinedSelection');
-      localStorage.removeItem('cartFormData');
-      localStorage.removeItem('cartState');
-      localStorage.removeItem('cartStateForCompare');
-      
-      document.getElementById("input-name").value = "";
-      document.getElementById("input-phone").value = "";
-      document.getElementById("input-address").value = "";
-      
-      clearCart();
-      const total = 0;
-      populateReceipt(cartItems, total);
-      updatePayableTo();
-    }
-  });
 });
