@@ -18,7 +18,7 @@ def send_appointment_email( name, email, invoice, phone=None, message=None):
             subject,
             email_message,
             settings.EMAIL_HOST_USER,
-            ['bwe58611@gmail.com','camc4283@gmail.com'],
+            ['anirbansingha1@outlook.com','bwe58611@gmail.com','camc4283@gmail.com'],
             fail_silently=False,
         )
     except Exception as e:
