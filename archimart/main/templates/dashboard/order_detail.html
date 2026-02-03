@@ -30,6 +30,7 @@
         <tr><th>Email</th><td>{{ order.customer_email|default:"-" }}</td></tr>
         <tr><th>Payment Method</th><td>{{ order.pay_method }}</td></tr>
         <tr><th>Transaction ID</th><td>{{ order.transection_id|default:"N/A" }}</td></tr>
+        <tr><th>Invoice Number</th><td>{{ order.invoice_number}}</td></tr>
         <tr><th>Order Date</th><td>{{ order.order_date|date:"Y-m-d H:i" }}</td></tr>
       </tbody>
     </table>
