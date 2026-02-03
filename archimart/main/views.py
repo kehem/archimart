@@ -811,8 +811,7 @@ def create_order(request):
                     thickness=item.get("thickness"),
                     price=price,
                 )
-            send_appointment_email(name = order.customer_name, email=order.customer_email, invoice=order.invoice_number,phone=order.customer_phone).delay()
-
+            send_appointment_email(name = order.customer_name, email=order.customer_email, invoice=order.invoice_number,phone=order.customer_phone)
 
             return JsonResponse({
                 "success": True,
