@@ -169,3 +169,21 @@ BKASH_USERNAME = "your_username"
 BKASH_PASSWORD = "your_password"
 BKASH_GRANT_TYPE = "your_grant_type"
 BKASH_APP_BASE_URL = 'https://checkout.sandbox.bka.sh/v1.2.0-beta' # Use sandbox for testing
+
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'mail.kehem.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'no-reply@kehem.com'
+EMAIL_HOST_USER2 = 'support@kehem.com'
+EMAIL_HOST_PASSWORD = '5d37445f50994f05b81053e03b7a9a51'
+EMAIL_HOST_PASSWORD_SUPPORT = '3cff643d07764f3babcc8566024788cb'
+EMAIL_USE_TLS = True
+
+# Celery settings
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True

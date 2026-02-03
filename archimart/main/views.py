@@ -6,6 +6,7 @@ from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Prefetch
+from .tasks import send_appointment_email
 import logging,json
 # import requests
 from django.db.models import Q
@@ -810,6 +811,8 @@ def create_order(request):
                     thickness=item.get("thickness"),
                     price=price,
                 )
+            send_appointment_email(name = order.customer_name, email=order.customer_email, invoice=order.invoice_number,phone=order.customer_phone).delay()
+
 
             return JsonResponse({
                 "success": True,
