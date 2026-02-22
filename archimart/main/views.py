@@ -1328,10 +1328,8 @@ def admin_order_detail(request, order_id):
 
 
 def invoice(request, order_id):
-    order_data = Order.objects.get(invoice_number = order_id)
-    order_items = OrderItem.objects.filter(order=order_data).prefetch_related('product')
+    order = get_object_or_404(Order.objects.prefetch_related('items__product'), id=order_id)
     context = {
-        "order": order_data,
-        "items": order_items,
+        "order": order,
     }
     return TemplateResponse(request, "dashboard/invoice.html", context)
