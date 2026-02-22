@@ -15,42 +15,36 @@
 
   @page {
     size: A4;
-    margin: 0; /* remove browser default margin */
+    margin: 0;
   }
 
   html, body {
-    background: white !important;
     margin: 0 !important;
     padding: 0 !important;
+    background: white !important;
   }
 
   body {
-    display: block !important; /* remove flex center */
+    display: block !important;
   }
 
-  /* Hide everything */
   body * {
     visibility: hidden;
   }
 
-  /* Show only receipt */
   .receipt-print,
   .receipt-print * {
     visibility: visible;
   }
 
-  /* Exact 20px margin from all edges */
+  /* 🔥 Correct balanced layout */
   .receipt-print {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    right: 20px;
-    bottom: 20px;
-    width: auto;
-    max-width: none;
+    position: relative;        /* NOT absolute */
+    width: calc(100% - 40px);  /* 20px left + 20px right */
+    margin: 20px auto;         /* top/bottom 20px */
     box-shadow: none !important;
     border-radius: 0 !important;
-    margin: 0 !important;
+    max-width: none !important;
   }
 
   .no-print {
