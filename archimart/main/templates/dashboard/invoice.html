@@ -12,11 +12,50 @@
     .logo-arch { color: #d4471a; }
     .logo-mart { color: #d4471a; border: 2px solid #d4471a; padding: 2px 8px; }
     @media print {
-      body { background: white; margin: 0; padding: 0; }
-      .no-print { display: none; }
-      body > * { display: none; }
-      .bg-white { display: block !important; margin: 0 !important; padding: 0 !important; max-width: 100% !important; width: 100% !important; box-shadow: none !important; }
-    }
+
+  /* Set A4 size */
+  @page {
+    size: A4;
+    margin: 15mm;
+  }
+
+  html, body {
+    width: 210mm;
+    height: 297mm;
+    background: white !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body {
+    display: block !important; /* remove flex centering */
+  }
+
+  /* Hide everything */
+  body * {
+    visibility: hidden;
+  }
+
+  /* Show only receipt */
+  .receipt-print,
+  .receipt-print * {
+    visibility: visible;
+  }
+
+  /* Proper A4 layout */
+  .receipt-print {
+    position: relative;
+    width: 100%;
+    max-width: 180mm;   /* keeps content centered nicely */
+    margin: 0 auto;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}
   </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-6">
@@ -27,7 +66,7 @@
   </button>
 
   <!-- Receipt Card -->
-  <div class="bg-white w-full max-w-2xl shadow-2xl rounded-sm">
+  <div class="receipt-print bg-white w-full max-w-2xl shadow-2xl rounded-sm">
 
     <!-- Header -->
     <div class="px-10 pt-10 pb-6 border-b border-gray-100">
