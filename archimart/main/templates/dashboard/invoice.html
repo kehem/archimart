@@ -13,22 +13,19 @@
     .logo-mart { color: #d4471a; border: 2px solid #d4471a; padding: 2px 8px; }
     @media print {
 
-  /* Set A4 size */
   @page {
     size: A4;
-    margin: 15mm;
+    margin: 0; /* remove browser default margin */
   }
 
   html, body {
-    width: 210mm;
-    height: 297mm;
     background: white !important;
     margin: 0 !important;
     padding: 0 !important;
   }
 
   body {
-    display: block !important; /* remove flex centering */
+    display: block !important; /* remove flex center */
   }
 
   /* Hide everything */
@@ -42,14 +39,18 @@
     visibility: visible;
   }
 
-  /* Proper A4 layout */
+  /* Exact 20px margin from all edges */
   .receipt-print {
-    position: relative;
-    width: 100%;
-    max-width: 180mm;   /* keeps content centered nicely */
-    margin: 0 auto;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    width: auto;
+    max-width: none;
     box-shadow: none !important;
     border-radius: 0 !important;
+    margin: 0 !important;
   }
 
   .no-print {
