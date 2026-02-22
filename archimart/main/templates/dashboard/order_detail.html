@@ -5,7 +5,7 @@
 <div class="content container mt-4">
   <div class="card shadow-sm p-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <h3>Order #{{ order.invoice_number }} <a href="{% url 'invoice' order.invoice_number %}" target="_blank">View Invoice</a></h3>
+      <h3>Order #{{ order.invoice_number }} <a href="{% url 'invoice' order.invoice_number|urlencode %}" target="_blank">View Invoice</a></h3>
       <!-- Status Change Form -->
       <form method="post" class="d-flex align-items-center">
         {% csrf_token %}
