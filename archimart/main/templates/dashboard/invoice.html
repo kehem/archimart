@@ -194,7 +194,7 @@
           <span class="font-semibold text-gray-500 w-36">Payment Method</span>
           <span class="inline-flex items-center gap-1.5 text-gray-800">
             <span class="w-2 h-2 rounded-full bg-green-400 inline-block"></span>
-            {{order.pay_method}}
+            {{order.pay_method|title}}
           </span>
         </div>
       </div>
@@ -205,13 +205,13 @@
       <p class="text-xs text-gray-300">Receipt downloaded from Archimart BD &copy; {% now 'Y' %}</p>
     </div>
     <div class="print-watermark 
-    {% if order.pay_method == 'Online Payment' %}
+    {% if order.pay_method == 'bkash' %}
         paid
     {% else %}
         unpaid
     {% endif %}
 ">
-      {% if order.pay_method == 'Online Payment' %}
+      {% if order.pay_method == 'bkash' %}
       PAID
       {% else %}
       UNPAID
