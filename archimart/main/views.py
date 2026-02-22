@@ -1329,7 +1329,7 @@ def admin_order_detail(request, order_id):
 
 def invoice(request, order_id):
     order_data = Order.objects.get(invoice_number = order_id)
-    order_items = OrderItem.objects.filter(order=order_data)
+    order_items = OrderItem.objects.filter(order=order_data).prefetch_related('product')
     context = {
         "order": order_data,
         "items": order_items,
