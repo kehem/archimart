@@ -58,6 +58,7 @@ urlpatterns = [
     path("api/similar-products/", views.get_similar_products, name="ajax_similar_products"),
     path('api/alternative', views.alternative_products, name='alternative_products'),
     path('api/search',views.search_products,name="search_products"),
+    path('api/invoice/<order_id>',views.invoice,name="invoice"),
 ]
 
 if settings.DEBUG:

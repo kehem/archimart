@@ -1325,3 +1325,13 @@ def admin_order_detail(request, order_id):
         "status_choices": Order._meta.get_field('status').choices  # Add this line
     }
     return TemplateResponse(request, "dashboard/order_detail.html", context)
+
+
+def invoice(request, order_id):
+    order_data = Order.objects.get(invoice_number = order_id)
+    order_items = OrderItem.objects.filter(order=order_data)
+    context = {
+        "order": order_data,
+        "items": order_items,
+    }
+    return TemplateResponse(request, "dashboard/invoice.html", context)
