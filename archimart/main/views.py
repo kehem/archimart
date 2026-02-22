@@ -1328,7 +1328,7 @@ def admin_order_detail(request, order_id):
 
 
 def invoice(request, order_id):
-    order = get_object_or_404(Order.objects.prefetch_related('items__product'), id=order_id)
+    order = get_object_or_404(Order.objects.prefetch_related('items__product'), invoice_number=order_id)
     context = {
         "order": order,
     }
