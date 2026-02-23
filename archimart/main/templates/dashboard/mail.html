@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Archimart Email Template</title>
+</head>
+<body style="margin:0; padding:0; background-color:#1a1a1a; font-family:'Georgia', serif;">
+
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#1a1a1a; padding: 40px 20px;">
+    <tr>
+      <td align="center">
+
+        <!-- Email Container -->
+        <table width="620" cellpadding="0" cellspacing="0" border="0" style="max-width:620px; width:100%; background-color:#ffffff; border-top: 5px solid #E05A2B;">
+
+          <!-- HEADER -->
+          <tr>
+            <td style="background-color:#111111; padding: 32px 40px; text-align:center;">
+              <!-- Logo -->
+              <img src="https://archimartbd.com/Image/logo.png" alt="Archimart" width="200" style="display:block; margin:0 auto;" />
+            </td>
+          </tr>
+
+          <!-- ORANGE ACCENT BAR -->
+          <tr>
+            <td style="background-color:#E05A2B; height:4px; font-size:0; line-height:0;">&nbsp;</td>
+          </tr>
+
+          <!-- HERO SECTION -->
+          <tr>
+            <td style="background-color:#f9f6f3; padding: 48px 40px 36px 40px; text-align:center; border-bottom: 1px solid #e8e0d8;">
+              <p style="margin:0 0 12px 0; font-size:12px; letter-spacing:4px; text-transform:uppercase; color:#E05A2B; font-family:'Georgia', serif; font-weight:bold;">Official Communication</p>
+              <h1 style="margin:0 0 20px 0; font-size:32px; font-weight:bold; color:#111111; font-family:'Georgia', serif; line-height:1.2;">Order Confirmed!</h1>
+              <p style="margin:0; font-size:16px; color:#555555; line-height:1.7; font-family:'Georgia', serif;">Thank you for shopping with <strong style="color:#E05A2B;">Archimart</strong>. Your order has been received and is being processed.</p>
+            </td>
+          </tr>
+
+          <!-- BODY CONTENT -->
+          <tr>
+            <td style="padding: 40px 40px 20px 40px; background-color:#ffffff;">
+
+              <p style="margin:0 0 24px 0; font-size:15px; color:#333333; line-height:1.8; font-family:'Georgia', serif;">
+                Dear <strong>{{customer_name}}</strong>,
+              </p>
+              <p style="margin:0 0 28px 0; font-size:15px; color:#555555; line-height:1.8; font-family:'Georgia', serif;">
+                We're delighted to confirm your recent order. Below you'll find a summary of your purchase. If you have any questions or concerns, our support team is ready to assist you.
+              </p>
+
+              <!-- Order Summary Box -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f9f6f3; border-left:4px solid #E05A2B; margin-bottom:32px;">
+                <tr>
+                  <td style="padding:24px 28px;">
+                    <p style="margin:0 0 16px 0; font-size:11px; letter-spacing:3px; text-transform:uppercase; color:#E05A2B; font-family:'Georgia', serif; font-weight:bold;">Order Summary</p>
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td style="font-size:14px; color:#555555; font-family:'Georgia', serif; padding-bottom:10px;">Order Number</td>
+                        <td style="font-size:14px; color:#111111; font-family:'Georgia', serif; font-weight:bold; text-align:right; padding-bottom:10px;">{{invoice}}</td>
+                      </tr>
+                      <tr>
+                        <td style="font-size:14px; color:#555555; font-family:'Georgia', serif; padding-bottom:10px; border-top:1px solid #e8e0d8; padding-top:10px;">Order Date</td>
+                        <td style="font-size:14px; color:#111111; font-family:'Georgia', serif; font-weight:bold; text-align:right; border-top:1px solid #e8e0d8; padding-top:10px;">{{date}}</td>
+                      </tr>
+                      
+                      <tr>
+                        <td style="font-size:14px; color:#555555; font-family:'Georgia', serif; border-top:1px solid #e8e0d8; padding-top:10px;">Total Amount</td>
+                        <td style="font-size:16px; color:#E05A2B; font-family:'Georgia', serif; font-weight:bold; text-align:right; border-top:1px solid #e8e0d8; padding-top:10px;">{{total}}</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- CTA Button -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:36px;">
+                <tr>
+                  <td align="center">
+                    <a href="https://archimartbd.com/api/invoice/{{invoice}}" style="display:inline-block; background-color:#E05A2B; color:#ffffff; text-decoration:none; font-size:13px; font-family:'Georgia', serif; font-weight:bold; letter-spacing:3px; text-transform:uppercase; padding:16px 40px; border:none;">Track Your Order</a>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:0 0 8px 0; font-size:15px; color:#555555; line-height:1.8; font-family:'Georgia', serif;">
+                We appreciate your trust in <strong style="color:#111;">Archimart</strong>. Our team is committed to delivering your products safely and on time.
+              </p>
+              <p style="margin:0 0 0 0; font-size:15px; color:#555555; line-height:1.8; font-family:'Georgia', serif;">
+                Warm regards,<br/>
+                <strong style="color:#111111;">The Archimart Team</strong>
+              </p>
+
+            </td>
+          </tr>
+
+          <!-- DIVIDER -->
+          <tr>
+            <td style="padding: 0 40px;">
+              <hr style="border:none; border-top:1px solid #e8e0d8; margin:0;" />
+            </td>
+          </tr>
+
+          <!-- FOOTER -->
+          <tr>
+            <td style="background-color:#111111; padding:32px 40px; text-align:center;">
+              <p style="margin:0 0 12px 0; font-size:12px; color:#888888; font-family:'Georgia', serif; line-height:1.6;">
+                You're receiving this email because you placed an order on <strong style="color:#E05A2B;">Archimart</strong>.<br/>
+                If you have questions, contact us at <a href="mailto:support@archimart.com" style="color:#E05A2B; text-decoration:none;">support@archimart.com</a>
+              </p>
+              <p style="margin:0 0 16px 0; font-size:11px; color:#555555; font-family:'Georgia', serif;">
+                &copy; 2025 Archimart. All rights reserved.<br/>
+                [Company Address] &bull;  &bull; <a href="[PRIVACY_POLICY]" style="color:#555555; text-decoration:underline;">Privacy Policy</a>
+              </p>
+              <!-- Social Links -->
+              <table cellpadding="0" cellspacing="0" border="0" align="center">
+                <tr>
+                  <td style="padding:0 8px;">
+                    <a href="#" style="color:#E05A2B; font-size:12px; font-family:'Georgia', serif; text-decoration:none; letter-spacing:1px;">Instagram</a>
+                  </td>
+                  <td style="color:#555; font-size:12px;">&bull;</td>
+                  <td style="padding:0 8px;">
+                    <a href="#" style="color:#E05A2B; font-size:12px; font-family:'Georgia', serif; text-decoration:none; letter-spacing:1px;">Facebook</a>
+                  </td>
+                  <td style="color:#555; font-size:12px;">&bull;</td>
+                  <td style="padding:0 8px;">
+                    <a href="#" style="color:#E05A2B; font-size:12px; font-family:'Georgia', serif; text-decoration:none; letter-spacing:1px;">Twitter</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- BOTTOM ACCENT -->
+          <tr>
+            <td style="background-color:#E05A2B; height:4px; font-size:0; line-height:0;">&nbsp;</td>
+          </tr>
+
+        </table>
+        <!-- END Email Container -->
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>
