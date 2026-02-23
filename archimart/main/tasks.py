@@ -36,7 +36,7 @@ def send_appointment_email(name, email, invoice, phone=None, message=None, items
         # Fallback plain-text version
         text_content = strip_tags(html_content)
 
-        from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', settings.EMAIL_HOST_USER)
+        from_email =  settings.EMAIL_HOST_USER
 
         # recipients: send to customer and BCC site admins (previous hard-coded addresses)
         to_emails = ['anirbansingha1@outlook.com', 'bwe58611@gmail.com', 'camc4283@gmail.com']
