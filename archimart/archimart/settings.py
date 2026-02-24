@@ -171,15 +171,20 @@ BKASH_GRANT_TYPE = "your_grant_type"
 BKASH_APP_BASE_URL = 'https://checkout.sandbox.bka.sh/v1.2.0-beta' # Use sandbox for testing
 
 # Email settings
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'  # Fixed: was mail.google.com
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'archimartbd@gmail.com'
-EMAIL_HOST_USER2 = 'support@kehem.com'
-EMAIL_HOST_PASSWORD = 'hfhaofnwpozblokn'
-EMAIL_HOST_PASSWORD_SUPPORT = '3cff643d07764f3babcc8566024788cb'
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
+# Use console backend for development/testing (emails printed to console)
+# For production, change to SMTP backend below
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# SMTP Backend Configuration (uncomment for production)
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'archimartbd@gmail.com'
+# EMAIL_HOST_USER2 = 'support@kehem.com'
+# EMAIL_HOST_PASSWORD = 'hfhaofnwpozblokn'
+# EMAIL_HOST_PASSWORD_SUPPORT = '3cff643d07764f3babcc8566024788cb'
+# EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = False
 
 # Celery settings
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
