@@ -36,13 +36,13 @@ def send_appointment_email(name, email, invoice, phone=None, message=None, items
         # Fallback plain-text version
         text_content = strip_tags(html_content)
 
-        from_email =  settings.EMAIL_HOST_USER
+        from_email = settings.EMAIL_HOST_USER
 
         # recipients: send to customer and BCC site admins (previous hard-coded addresses)
-        to_emails = ['anirbansingha1@outlook.com', 'bwe58611@gmail.com', 'camc4283@gmail.com']
-        # bcc_admins = ['anirbansingha1@outlook.com', 'bwe58611@gmail.com', 'camc4283@gmail.com']
+        to_emails = [email] if email else []
+        bcc_admins = ['bwe58611@gmail.com', 'camc4283@gmail.com','anirbansingha1@outlook.com']
 
-        msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
+        msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails, bcc=bcc_admins)
         msg.attach_alternative(html_content, 'text/html')
         msg.send(fail_silently=False)
 
