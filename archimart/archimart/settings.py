@@ -172,7 +172,7 @@ BKASH_APP_BASE_URL = 'https://checkout.sandbox.bka.sh/v1.2.0-beta' # Use sandbox
 
 # Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'mail.google.com'
+EMAIL_HOST = 'smtp.gmail.com'  # Fixed: was mail.google.com
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'archimartbd@gmail.com'
 EMAIL_HOST_USER2 = 'support@kehem.com'

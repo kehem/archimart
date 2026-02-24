@@ -4,6 +4,9 @@ from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 @shared_task
@@ -13,7 +16,7 @@ def send_appointment_email(name, email, invoice, phone=None, message=None, items
     Keeps original parameters for compatibility and adds optional context
     values for richer templates (items, total, tracking_link, order_date).
     """
-    print('celery added')
+    logger.info(f"Starting to send confirmation email for invoice {invoice} to {email}")
     subject = 'Order Confirmation - Archimart'
 
     # Build template context
@@ -44,8 +47,10 @@ def send_appointment_email(name, email, invoice, phone=None, message=None, items
 
         msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails, bcc=bcc_admins)
         msg.attach_alternative(html_content, 'text/html')
-        msg.send(fail_silently=False)
+        result = msg.send(fail_silently=False)
+        logger.info(f"Email successfully sent to {email} for invoice {invoice}. Result: {result}")
+        return result
 
     except Exception as e:
-        # Log the error somewhere appropriate; for now print to console
-        print('Fail send email ' + str(e))
+        logger.error(f"Failed to send email for invoice {invoice} to {email}: {str(e)}", exc_info=True)
+        raise

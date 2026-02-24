@@ -811,7 +811,16 @@ def create_order(request):
                     thickness=item.get("thickness"),
                     price=price,
                 )
-            send_appointment_email(name = order.customer_name, email=order.customer_email, invoice=order.invoice_number,phone=order.customer_phone,total=order.total, order_date=order.order_date,)
+            # Send email asynchronously via Celery
+            send_appointment_email.delay(
+                name=order.customer_name,
+                email=order.customer_email,
+                invoice=order.invoice_number,
+                phone=order.customer_phone,
+                total=order.total,
+                order_date=order.order_date,
+            )
+            logger.info(f"Email task queued for order {order.invoice_number}")
 
             return JsonResponse({
                 "success": True,
