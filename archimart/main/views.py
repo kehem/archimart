@@ -814,7 +814,7 @@ def create_order(request):
             logger.info(f"started working for email {order.invoice_number}")
             print (f"started working for email {order.invoice_number}")
             # Send email asynchronously via Celery
-            send_appointment_email.delay(
+            send_appointment_email(
                 name=order.customer_name,
                 email=order.customer_email,
                 invoice=order.invoice_number,
