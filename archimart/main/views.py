@@ -811,6 +811,7 @@ def create_order(request):
                     thickness=item.get("thickness"),
                     price=price,
                 )
+            logger.info(f"started working for email {order.invoice_number}")
             # Send email asynchronously via Celery
             send_appointment_email.delay(
                 name=order.customer_name,
